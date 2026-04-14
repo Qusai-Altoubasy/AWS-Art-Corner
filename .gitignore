@@ -1,0 +1,44 @@
+# --- General / OS ---
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+
+# --- Java / Spring Boot (Backend) ---
+backend/**/target/
+backend/**/*.class
+backend/**/*.jar
+backend/**/*.war
+backend/**/*.ear
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# --- IDEs (IntelliJ, VS Code) ---
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+bin/
+
+# --- AWS CDK (TypeScript Specific) ---
+infrastructure/cdk.out/
+infrastructure/.cdk.staging/
+
+infrastructure/**/*.js
+infrastructure/**/*.d.ts
+
+infrastructure/node_modules/
+
+infrastructure/.parcel-cache/
+infrastructure/dist/
+
+# --- Environment & Security ---
+.env
+.env.local
+.env.*.local
+credentials.json
+*.pem
+*.key
+.aws/
