@@ -6,12 +6,13 @@ Thumbs.db
 *.swp
 
 # --- Java / Spring Boot (Backend) ---
-backend/**/target/
-backend/**/*.class
-backend/**/*.jar
-backend/**/*.war
-backend/**/*.ear
-backend/.mvn/wrapper/maven-wrapper.jar
+**/target/
+**/build/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
 
 # --- IDEs (IntelliJ, VS Code) ---
 .idea/
@@ -20,25 +21,27 @@ backend/.mvn/wrapper/maven-wrapper.jar
 .project
 .settings/
 .vscode/
+.history/
 bin/
 
 # --- AWS CDK (TypeScript Specific) ---
-infrastructure/cdk.out/
-infrastructure/.cdk.staging/
-
+node_modules/
+**/node_modules/
+**/cdk.out/
+.cdk.staging/
 infrastructure/**/*.js
 infrastructure/**/*.d.ts
-
-infrastructure/node_modules/
-
-infrastructure/.parcel-cache/
-infrastructure/dist/
+!**/jest.config.js
+.parcel-cache/
+dist/
+out/
 
 # --- Environment & Security ---
 .env
 .env.local
-.env.*.local
+.env.*
 credentials.json
 *.pem
 *.key
 .aws/
+.serverless/
