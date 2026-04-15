@@ -28,11 +28,11 @@ export const NETWORKING = {
   natGateways:      0,
  
   // Private Subnet A — Lambda compute & RDS Aurora PostgreSQL 
-  subnetAName:      `${PROJECT.prefix}-private-a`,
+  subnetAName:`${PROJECT.prefix}-private-a`,
   subnetACidrMask:  24,
  
   // Private Subnet B — RDS Aurora PostgreSQL standby
-  subnetBName:      `${PROJECT.prefix}-private-b`,
+  subnetBName:`${PROJECT.prefix}-private-b`,
   subnetBCidrMask:  24,
  
   // Security group names
