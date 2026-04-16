@@ -60,7 +60,24 @@ export const DATABASE = {
   backupRetentionDays: ENV === 'prod' ? 14 : 3,
   preferredBackupWindow: '03:00-04:00',
   preferredMaintenanceWindow: 'sun:04:00-sun:05:00',
- } as const;
+} as const;
+
+export const STORAGE = { // S3 
+  archiveBucketName: `${PROJECT.prefix}-archive-${AWS_ENV.account}`,
+  backupBucketName:  `${PROJECT.prefix}-backup-${AWS_ENV.account}`,
+
+  nonCurrentVersionExpiration: 30,
+
+  versioning: ENV == 'prod'? true: false,
+} as const;
+
+export const DYNAMO = {
+  tableName: `${PROJECT.prefix}-ShoppingCartTable`,
+
+  partitionKey: 'customerId',
+
+  pointInTimeRecovery: true,
+} as const;
 
 
 export interface AppConfig {
@@ -69,6 +86,8 @@ export interface AppConfig {
   project: typeof PROJECT;
   networking: typeof NETWORKING;
   database: typeof DATABASE;
+  storage: typeof STORAGE;
+  dynamo: typeof DYNAMO;
   tags: typeof TAGS;
 }
 
@@ -78,7 +97,9 @@ export const appConfig: AppConfig = {
   project: PROJECT,
   networking: NETWORKING,
   database: DATABASE,
+  storage: STORAGE,
+  dynamo: DYNAMO,
   tags: TAGS,
 };
 
-export default appConfig;
+export default appConfig; 

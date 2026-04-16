@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
 export class Networking extends Construct {
-
   public readonly vpc: ec2.IVpc;
   public readonly lambdaSg: ec2.ISecurityGroup;
   public readonly databaseSg: ec2.ISecurityGroup;
