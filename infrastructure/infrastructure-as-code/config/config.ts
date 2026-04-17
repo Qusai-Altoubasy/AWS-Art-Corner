@@ -79,6 +79,55 @@ export const DYNAMO = {
   pointInTimeRecovery: true,
 } as const;
 
+export const MESSAGING= {
+  DLQ:{
+    QueueName : `${PROJECT.prefix}-OrderDLQ`,
+    retentionPeriodDays : 14,
+  },
+
+  orderQueue:{
+    QueueName: `${PROJECT.prefix}-OrderQueue.fifo`,
+    visibilityTimeoutSeconds: 30,
+    receiveMessageWaitTime: 20,
+    maxReceiveCount: 3
+  },
+
+  employeesTopic:{
+    topicName: `${PROJECT.prefix}-employeesTopic`,
+    emails: [
+      'employee1@gmail.com',
+      'employee2@gmail.com',
+      'employee3@gmail.com'
+    ]
+    },
+
+  adminsTopic:{
+    topicName: `${PROJECT.prefix}-adminsTopic`,
+    emails: [
+      'admin1@gmail.com',
+      'admin2@gmail.com',
+      'admin2@gmail.com'
+    ]
+  },
+
+  events: {
+    ruleName: `${PROJECT.prefix}-weekly-maintenance`,
+    weeklyMaintenanceCron: {
+        minute: '0',
+        hour: '3',
+        month: '*',
+        weekDay: 'FRI',
+        year: '*'
+    }
+  },
+
+  DLQAlarm: {
+    alarmName: `${PROJECT.prefix}-dlq-not-empty`,
+    period: 30,
+    threshold: 1,
+    evaluationPeriods: 1,
+  }
+}
 
 export interface AppConfig {
   env: AppEnv;
@@ -88,6 +137,7 @@ export interface AppConfig {
   database: typeof DATABASE;
   storage: typeof STORAGE;
   dynamo: typeof DYNAMO;
+  messaging: typeof MESSAGING;
   tags: typeof TAGS;
 }
 
@@ -99,6 +149,7 @@ export const appConfig: AppConfig = {
   database: DATABASE,
   storage: STORAGE,
   dynamo: DYNAMO,
+  messaging: MESSAGING,
   tags: TAGS,
 };
 

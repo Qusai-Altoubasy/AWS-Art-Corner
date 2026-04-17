@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { Networking } from '../constructs/networking';
 import { Database } from '../constructs/database';
 import { Storage } from '../constructs/storage';
+import { Messaging } from '../constructs/messaging';
 
 export class QusaiProjectStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,6 +17,8 @@ export class QusaiProjectStack extends cdk.Stack {
     });
 
     const storage = new Storage(this, 'Storage');
+
+    const messaging = new Messaging(this, 'Messaging');
 
   }
 }

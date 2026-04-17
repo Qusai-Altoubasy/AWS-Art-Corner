@@ -56,6 +56,7 @@ export class Database extends Construct {
         [rds.ClusterInstance.serverlessV2('StandByInstance', {
             instanceIdentifier: appConfig.database.standbyIdentifier,
             autoMinorVersionUpgrade: true,
+            publiclyAccessible: false,
         })]
         : [],
 
