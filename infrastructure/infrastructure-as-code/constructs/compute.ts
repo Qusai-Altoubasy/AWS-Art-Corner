@@ -10,8 +10,6 @@ import * as lambda_event_sources from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
-import { AutoScalingAction } from 'aws-cdk-lib/aws-cloudwatch-actions';
-
 
 export interface ComputeProps {
   vpc: ec2.IVpc;
@@ -23,6 +21,7 @@ export interface ComputeProps {
   orderQueue: sqs.Queue;
   employeesTopic: sns.Topic;
   adminsTopic: sns.Topic;
+  databaseCluster: rds.DatabaseCluster;
 }
 
 export class Compute extends Construct {
@@ -120,6 +119,7 @@ export class Compute extends Construct {
             environment: {
                 DB_SECRET_NAME: props.databaseSecret.secretName,
                 BACKUP_BUCKET_NAME: props.backupBucket.bucketName,
+                DB_CLUSTER_IDENTIFIER: props.databaseCluster.clusterIdentifier,
             },
         });
 
@@ -141,6 +141,15 @@ export class Compute extends Construct {
             effect: iam.Effect.ALLOW,
         }));
      
+        this.backupWorker.addToRolePolicy(new iam.PolicyStatement({
+            actions: [
+                "rds:CreateDBClusterSnapshot",
+                "rds:DescribeDBClusters"
+            ],
+            resources: [props.databaseCluster.clusterArn],
+            effect: iam.Effect.ALLOW,
+        }));
+
         props.archiveBucket.grantWrite(this.archiveWorker);
         props.backupBucket.grantWrite(this.backupWorker);
     }

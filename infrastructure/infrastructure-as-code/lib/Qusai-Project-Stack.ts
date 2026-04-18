@@ -33,6 +33,7 @@ export class QusaiProjectStack extends cdk.Stack {
       orderQueue: messaging.orderQueue,
       employeesTopic: messaging.employeesTopic,
       adminsTopic: messaging.adminsTopic,
+      databaseCluster: database.cluster
     });
 
     messaging.addMaintenanceTargets(compute.archiveWorker, compute.backupWorker);
