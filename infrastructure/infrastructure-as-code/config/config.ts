@@ -106,7 +106,7 @@ export const MESSAGING= {
     emails: [
       'admin1@gmail.com',
       'admin2@gmail.com',
-      'admin2@gmail.com'
+      'admin3@gmail.com'
     ]
   },
 
@@ -127,6 +127,41 @@ export const MESSAGING= {
     threshold: 1,
     evaluationPeriods: 1,
   }
+} as const;
+
+export const COMPUTE = {
+  broadCastFunction: {
+    functionName: `${PROJECT.prefix}-broadcast`,
+    ImageAsset: '../../backend',
+    memorySize: 2048,
+    timeout: 30,
+    minCapacity: PROJECT.env == 'prod'? 5: 1,
+    maxCapacity: PROJECT.env == "prod"? 1000: 5
+  },
+
+  notificationLambda: {
+    functionName: `${PROJECT.prefix}-notificationService`,
+    handler: 'main.handler',
+    codeAsset: './src/notification-service',
+    timeout: 30,
+    memorySize: 512,
+  },
+
+  archiveWorker: {
+    functionName: `${PROJECT.prefix}-archiveWorker`,
+    handler: 'main.handler',
+    codeAsset: './src/archive-worker',
+    timeout: 10,
+    memorySize: 512,
+  },
+
+  backupWorker: {
+    functionName: `${PROJECT.prefix}-backupWorker`,
+    handler: 'main.handler',
+    codeAsset: './src/archive-worker',
+    timeout: 15,
+    memorySize: 512,
+  }
 }
 
 export interface AppConfig {
@@ -138,6 +173,7 @@ export interface AppConfig {
   storage: typeof STORAGE;
   dynamo: typeof DYNAMO;
   messaging: typeof MESSAGING;
+  compute: typeof COMPUTE;
   tags: typeof TAGS;
 }
 
@@ -150,6 +186,7 @@ export const appConfig: AppConfig = {
   storage: STORAGE,
   dynamo: DYNAMO,
   messaging: MESSAGING,
+  compute: COMPUTE,
   tags: TAGS,
 };
 

@@ -5,6 +5,8 @@ import * as sns_subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import * as cloudwatch_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
 import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
@@ -13,8 +15,9 @@ export class Messaging extends Construct {
     public readonly orderDeadLetterQueue: sqs.Queue;
     public readonly employeesTopic: sns.Topic; // newOrder
     public readonly adminsTopic: sns.Topic; // stockAlert or 
+    private weeklyMaintenanceRule: events.Rule;
 
-    constructor(scope: Construct, id: string) {
+    constructor(scope: Construct, id: string){
         super(scope, id);
 
         // DLQ
@@ -77,7 +80,7 @@ export class Messaging extends Construct {
         );
 
         // EventBridge 
-        const weeklyMaintenanceRule = new events.Rule(this, 'WeeklyMaintenanceRule', {
+        this.weeklyMaintenanceRule = new events.Rule(this, 'WeeklyMaintenanceRule', {
             ruleName: appConfig.messaging.events.ruleName,
             description: 'Trigger Archive and Backup workers every Friday at 3 AM',
             schedule: events.Schedule.cron({
@@ -86,11 +89,6 @@ export class Messaging extends Construct {
                 weekDay: appConfig.messaging.events.weeklyMaintenanceCron.weekDay,
             }),
         });
-
-        /*
-        weeklyMaintenanceRule.addTarget(new targets.LambdaFunction(props.archiveWorker));
-        weeklyMaintenanceRule.addTarget(new targets.LambdaFunction(props.backupWorker));
-        */
 
         // DLQ alarm for admins by useing cloudwatch
         const dlqAlarm = new cloudwatch.Alarm(this, 'DLQAlarm', {
@@ -109,5 +107,10 @@ export class Messaging extends Construct {
 
         dlqAlarm.addAlarmAction(new cloudwatch_actions.SnsAction(this.adminsTopic));
 
+    }
+
+    public addMaintenanceTargets(archiveWorker: lambda.IFunction, backupWorker: lambda.IFunction) {
+        this.weeklyMaintenanceRule.addTarget(new targets.LambdaFunction(archiveWorker));
+        this.weeklyMaintenanceRule.addTarget(new targets.LambdaFunction(backupWorker));
     }
 }
