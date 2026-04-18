@@ -105,5 +105,21 @@ export class Networking extends Construct {
       privateDnsEnabled: true,
       open: false,
     });
+
+    this.vpc.addInterfaceEndpoint('ECRApiEndpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.ECR,
+      subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      securityGroups: [endpointSg],
+      privateDnsEnabled: true,
+      open: false,
+    });
+
+    this.vpc.addInterfaceEndpoint('ECRDockerEndpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.ECR_DOCKER,
+      subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      securityGroups: [endpointSg],
+      privateDnsEnabled: true,
+      open: false,
+    });
   }
 }
