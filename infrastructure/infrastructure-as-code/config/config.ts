@@ -129,7 +129,7 @@ export const MESSAGING= {
   }
 } as const;
 
-export const COMPUTE = {
+export const COMPUTE = {  
   broadCastFunction: {
     functionName: `${PROJECT.prefix}-broadcast`,
     ImageAsset: '../../backend',
@@ -158,7 +158,7 @@ export const COMPUTE = {
   backupWorker: {
     functionName: `${PROJECT.prefix}-backupWorker`,
     handler: 'main.handler',
-    codeAsset: './src/archive-worker',
+    codeAsset: './src/backup-worker',
     timeout: 15,
     memorySize: 512,
   }
