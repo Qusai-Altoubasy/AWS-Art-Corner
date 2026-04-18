@@ -69,7 +69,7 @@ export class Compute extends Construct {
 
         this.notificationLambda = new lambda.Function(this, 'NotificationLambda', {
             functionName: appConfig.compute.notificationLambda.functionName,
-            runtime: lambda.Runtime.PYTHON_3_14,
+            runtime: lambda.Runtime.PYTHON_3_13,
             handler: appConfig.compute.notificationLambda.handler,
             code: lambda.Code.fromAsset(appConfig.compute.notificationLambda.codeAsset),
             vpc: props.vpc,
@@ -90,7 +90,7 @@ export class Compute extends Construct {
 
         this.archiveWorker = new lambda.Function(this, 'ArchiveWorker', {
             functionName: appConfig.compute.archiveWorker.functionName,
-            runtime: lambda.Runtime.PYTHON_3_14,
+            runtime: lambda.Runtime.PYTHON_3_13,
             handler: appConfig.compute.archiveWorker.handler,
             code: lambda.Code.fromAsset(appConfig.compute.archiveWorker.codeAsset),
             vpc: props.vpc,
@@ -107,7 +107,7 @@ export class Compute extends Construct {
 
         this.backupWorker = new lambda.Function(this, 'BackupWorker', {
             functionName: appConfig.compute.backupWorker.functionName,
-            runtime: lambda.Runtime.PYTHON_3_14,
+            runtime: lambda.Runtime.PYTHON_3_13,
             handler: appConfig.compute.backupWorker.handler,
             code: lambda.Code.fromAsset(appConfig.compute.backupWorker.codeAsset),
             vpc: props.vpc,
