@@ -54,6 +54,11 @@ export class Storage extends Construct {
                 name: appConfig.dynamo.partitionKey,
                 type: dynamodb.AttributeType.STRING 
             },
+            sortKey: {
+                name: appConfig.dynamo.sortKey,
+                type: dynamodb.AttributeType.STRING
+            },
+
             billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 
             encryption:    dynamodb.TableEncryption.AWS_MANAGED,

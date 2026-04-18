@@ -80,7 +80,7 @@ export const DYNAMO = {
   tableName: `${PROJECT.prefix}-ShoppingCartTable`,
 
   partitionKey: 'customerId',
-
+  sortKey: 'productId',
   pointInTimeRecovery: true,
 } as const;
 
