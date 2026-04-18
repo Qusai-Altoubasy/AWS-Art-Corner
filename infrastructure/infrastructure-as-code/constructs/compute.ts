@@ -27,6 +27,7 @@ export interface ComputeProps {
 
 export class Compute extends Construct {
     public readonly broadCastFunction: lambda.DockerImageFunction;
+    public readonly broadCastAlias: lambda.Alias;
     public readonly notificationLambda: lambda.Function;
     public readonly archiveWorker: lambda.Function;
     public readonly backupWorker: lambda.Function;
@@ -52,13 +53,13 @@ export class Compute extends Construct {
             }
         });
 
-        const broadCastAlias = new lambda.Alias(this, 'BroadCastAlias', {
+        this.broadCastAlias = new lambda.Alias(this, 'BroadCastAlias', {
             aliasName: appConfig.env,
             version: this.broadCastFunction.currentVersion,
             provisionedConcurrentExecutions: appConfig.compute.broadCastFunction.minCapacity,
         });
 
-        const scalingTarget = broadCastAlias.addAutoScaling({
+        const scalingTarget = this.broadCastAlias.addAutoScaling({
             minCapacity: appConfig.compute.broadCastFunction.minCapacity,
             maxCapacity: appConfig.compute.broadCastFunction.maxCapacity,
         });

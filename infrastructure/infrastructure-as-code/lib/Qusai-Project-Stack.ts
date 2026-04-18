@@ -37,7 +37,7 @@ export class QusaiProjectStack extends cdk.Stack {
     messaging.addMaintenanceTargets(compute.archiveWorker, compute.backupWorker);
 
     const api = new Gateway(this, 'GatewayLayer',{
-      broadCastAlias: compute.broadCastFunction
+      broadCastAlias: compute.broadCastAlias
     });
 
   }
