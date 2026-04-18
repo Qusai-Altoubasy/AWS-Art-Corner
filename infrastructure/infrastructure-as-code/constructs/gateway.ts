@@ -116,7 +116,7 @@ export class Gateway extends Construct {
                         effect: iam.Effect.DENY,
                         conditions: {
                             StringNotEquals: {
-                                'aws:HeaderValue': [appConfig.gateway.api.HeaderValue] 
+                                'aws:Referer': [appConfig.gateway.api.HeaderValue] 
                             }
                         }
                     }),

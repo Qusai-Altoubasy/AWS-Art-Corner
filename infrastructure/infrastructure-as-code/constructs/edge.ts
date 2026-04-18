@@ -44,7 +44,7 @@ export class Edge extends Construct {
             defaultBehavior: {
                 origin: new origins.RestApiOrigin(props.api, {
                     customHeaders: {
-                    'X-Origin-Verify': appConfig.edge.cloudFrontDistribution.HeaderValue as string, 
+                    'Referer': appConfig.edge.cloudFrontDistribution.HeaderValue as string, 
                     },
                 }),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.HTTPS_ONLY,
