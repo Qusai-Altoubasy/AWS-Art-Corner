@@ -2,7 +2,6 @@ import * as cdk from 'aws-cdk-lib';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
@@ -11,7 +10,7 @@ export class Gateway extends Construct {
     private readonly userPoolClient: cognito.UserPoolClient;
     public readonly api: apigateway.RestApi;
 
-    constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.Function}) {
+    constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.Alias}) {
         super(scope, id);
         
         this.userPool = new cognito.UserPool(this, 'UserPool', {
@@ -72,7 +71,7 @@ export class Gateway extends Construct {
 
             accessTokenValidity: cdk.Duration.minutes(appConfig.gateway.userPoolClient.accessTokenValidity),
             idTokenValidity: cdk.Duration.minutes(appConfig.gateway.userPoolClient.idTokenValidity),
-            refreshTokenRotationGracePeriod: cdk.Duration.days(appConfig.gateway.userPoolClient.refreshTokenValidity),
+            refreshTokenValidity: cdk.Duration.days(appConfig.gateway.userPoolClient.refreshTokenValidity),
 
             enableTokenRevocation: true,
             preventUserExistenceErrors: true
