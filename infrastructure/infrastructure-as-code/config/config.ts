@@ -134,7 +134,7 @@ export const COMPUTE = {
     functionName: `${PROJECT.prefix}-broadcast`,
     ImageAsset: '../../backend',
     memorySize: 2048,
-    timeout: 30,
+    timeout: 20,
     minCapacity: PROJECT.env == 'prod'? 5: 1,
     maxCapacity: PROJECT.env == "prod"? 1000: 5
   },
@@ -164,6 +164,32 @@ export const COMPUTE = {
   }
 }
 
+export const GATEWAY = {
+  userPool: {
+    userPoolName: `${PROJECT.prefix}-userPool`,
+    tempPasswordValidityDays: ENV === 'prod' ? 3 : 7,
+  },
+ 
+  userPoolClient: {
+    clientName: `${PROJECT.prefix}-appClient`,
+    accessTokenValidity: 60,
+    idTokenValidity: 60,
+    refreshTokenValidity: 30,
+  },
+ 
+  api: {
+    restApiName: `${PROJECT.prefix}-api`,
+    stageName: ENV,
+    throttlingBurstLimit: ENV === 'prod' ? 1000 : 100,
+    throttlingRateLimit: ENV === 'prod' ? 500  : 50,
+  },
+
+  cognitoAuthorizer: {
+    authorizerName: `${PROJECT.prefix}-cognitoAuthorizer`,
+
+  }
+} as const;
+
 export interface AppConfig {
   env: AppEnv;
   awsEnv: cdk.Environment;
@@ -174,6 +200,7 @@ export interface AppConfig {
   dynamo: typeof DYNAMO;
   messaging: typeof MESSAGING;
   compute: typeof COMPUTE;
+  gateway: typeof GATEWAY;
   tags: typeof TAGS;
 }
 
@@ -187,6 +214,7 @@ export const appConfig: AppConfig = {
   dynamo: DYNAMO,
   messaging: MESSAGING,
   compute: COMPUTE,
+  gateway: GATEWAY,
   tags: TAGS,
 };
 
