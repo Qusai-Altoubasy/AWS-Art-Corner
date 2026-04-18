@@ -15,6 +15,11 @@ export const AWS_ENV: cdk.Environment = {
   region: process.env.CDK_DEFAULT_REGION ?? 'eu-west-1',
 };
 
+export const WAF_ENV: cdk.Environment= {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: 'us-east-1'
+}
+
 export const TAGS: Record<string, string> = {
   Project: PROJECT.name,
   Environment: ENV,
@@ -220,6 +225,7 @@ export interface AppConfig {
   gateway: typeof GATEWAY;
   edge: typeof EDGE;
   tags: typeof TAGS;
+  wafEnv: typeof WAF_ENV;
 }
 
 export const appConfig: AppConfig = {
@@ -235,6 +241,7 @@ export const appConfig: AppConfig = {
   gateway: GATEWAY,
   edge: EDGE,
   tags: TAGS,
+  wafEnv: WAF_ENV
 };
 
 export default appConfig; 

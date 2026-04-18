@@ -8,106 +8,9 @@ import { appConfig } from '../config/config';
 
 export class Edge extends Construct {
     public readonly distribution: cloudfront.Distribution;
-    public readonly waf: wafv2.CfnWebACL;
 
     constructor(scope: Construct, id: string, props: {api: apigateway.RestApi}) {
         super(scope, id);
-
-        this.waf = new wafv2.CfnWebACL(this, 'WebACL', {
-            name: appConfig.edge.waf.name,
-            scope: 'CLOUDFRONT',
-            defaultAction: { allow: {} },
-
-            visibilityConfig: {
-                sampledRequestsEnabled: true,
-                cloudWatchMetricsEnabled: true,
-                metricName: appConfig.edge.waf.metricName
-            },
-
-            rules: [
-                {
-                    name: 'CommonRuleSet', 
-                    priority: 1,
-                    overrideAction: { none: {} },
-                    statement: {
-                        managedRuleGroupStatement: {
-                            vendorName: 'AWS',
-                            name: 'AWSManagedRulesCommonRuleSet'
-                        },
-                    },
-                    visibilityConfig: {
-                        sampledRequestsEnabled: true,
-                        cloudWatchMetricsEnabled: true,
-                        metricName: 'CommonRuleSet'
-                    }
-                },
-
-                {
-                    name: 'KnownBadInputs',
-                    priority: 2,
-                    overrideAction: { none: {} },
-                    statement: {
-                        managedRuleGroupStatement: {
-                            vendorName: 'AWS',
-                            name: 'AWSManagedRulesKnownBadInputsRuleSet'
-                        },
-                    },
-                    visibilityConfig: {
-                        sampledRequestsEnabled: true,
-                        cloudWatchMetricsEnabled: true,
-                        metricName: 'KnownBadInputs'
-                    }
-                },
-                {
-                name: 'IPReputationList',
-                priority: 3,
-                overrideAction: { none: {} },
-                statement: {
-                    managedRuleGroupStatement: {
-                    vendorName: 'AWS',
-                    name: 'AWSManagedRulesAmazonIpReputationList',
-                    },
-                },
-                visibilityConfig: {
-                    sampledRequestsEnabled:   true,
-                    cloudWatchMetricsEnabled: true,
-                    metricName: 'IPReputationList',
-                    },
-                },
-                {
-                    name: 'SQLInjectionProtection',
-                    priority: 4,
-                    overrideAction: { none: {} },
-                    statement: {
-                        managedRuleGroupStatement: {
-                            vendorName: 'AWS',
-                            name: 'AWSManagedRulesSQLiRuleSet'
-                        },
-                    },
-                    visibilityConfig: {
-                        sampledRequestsEnabled: true,
-                        cloudWatchMetricsEnabled: true,
-                        metricName: 'SQLInjectionProtection'
-                    }
-                },
-                {
-                    name: 'RateLimitRule',
-                    priority: 5,
-                    statement: {
-                        rateBasedStatement: {
-                            limit: 1000,
-                            aggregateKeyType: 'IP',
-                        }
-                    },
-                    action: { block: {} },
-                    visibilityConfig: {
-                        sampledRequestsEnabled: true,
-                        cloudWatchMetricsEnabled: true,
-                        metricName: 'RateLimitRule'
-                    }
-                }
-            ]
-        });
 
         const apiCachePolicy = new cloudfront.CachePolicy(this, 'ApiCachePolicy', {
             cachePolicyName: appConfig.edge.cloudFrontPolicy.cachePolicyName,
@@ -136,7 +39,7 @@ export class Edge extends Construct {
         this.distribution = new cloudfront.Distribution(this, 'Distribution', {
             comment: appConfig.edge.cloudFrontDistribution.comment,
             priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
-            webAclId: this.waf.attrArn,
+            webAclId: cdk.Fn.importValue('SharedWafArn'),
 
             defaultBehavior: {
                 origin: new origins.RestApiOrigin(props.api, {
