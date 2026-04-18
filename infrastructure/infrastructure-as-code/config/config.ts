@@ -87,7 +87,7 @@ export const MESSAGING= {
 
   orderQueue:{
     QueueName: `${PROJECT.prefix}-OrderQueue.fifo`,
-    visibilityTimeoutSeconds: 30,
+    visibilityTimeoutSeconds: 180,
     receiveMessageWaitTime: 20,
     maxReceiveCount: 3
   },
