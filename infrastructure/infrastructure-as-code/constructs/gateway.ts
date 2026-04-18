@@ -6,9 +6,9 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
-export class Auth extends Construct {
-    public readonly userPool: cognito.UserPool;
-    public readonly userPoolClient: cognito.UserPoolClient;
+export class Gateway extends Construct {
+    private readonly userPool: cognito.UserPool;
+    private readonly userPoolClient: cognito.UserPoolClient;
     public readonly api: apigateway.RestApi;
 
     constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.Function}) {

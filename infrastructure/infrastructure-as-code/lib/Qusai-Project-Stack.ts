@@ -5,6 +5,7 @@ import { Database } from '../constructs/database';
 import { Storage } from '../constructs/storage';
 import { Messaging } from '../constructs/messaging';
 import { Compute } from '../constructs/compute';
+import { Gateway } from '../constructs/gateway';
 
 export class QusaiProjectStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -34,6 +35,10 @@ export class QusaiProjectStack extends cdk.Stack {
     });
 
     messaging.addMaintenanceTargets(compute.archiveWorker, compute.backupWorker);
+
+    const api = new Gateway(this, 'GatewayLayer',{
+      broadCastAlias: compute.broadCastFunction
+    });
 
   }
 }
