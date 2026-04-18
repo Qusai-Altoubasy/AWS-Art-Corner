@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
@@ -98,7 +99,29 @@ export class Gateway extends Construct {
                     'X-Amz-Security-Token',
                 ],
                 maxAge: cdk.Duration.hours(1),
-            }
+            },
+
+            policy: new iam.PolicyDocument({
+                statements: [
+                    new iam.PolicyStatement({
+                        actions: ['execute-api:Invoke'],
+                        resources: ['*'],
+                        principals: [new iam.AnyPrincipal()],
+                        effect: iam.Effect.ALLOW,
+                    }),
+                    new iam.PolicyStatement({
+                        actions: ['execute-api:Invoke'],
+                        resources: ['*'],
+                        principals: [new iam.AnyPrincipal()],
+                        effect: iam.Effect.DENY,
+                        conditions: {
+                            StringNotEquals: {
+                                'aws:HeaderValue': [appConfig.gateway.api.HeaderValue] 
+                            }
+                        }
+                    }),
+                ]
+            })
         });
 
         const cognitoAuthorizer = new apigateway.CognitoUserPoolsAuthorizer(this, 'CognitoAuthorizer', {

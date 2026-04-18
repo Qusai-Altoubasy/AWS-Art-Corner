@@ -182,13 +182,30 @@ export const GATEWAY = {
     stageName: ENV,
     throttlingBurstLimit: ENV === 'prod' ? 1000 : 100,
     throttlingRateLimit: ENV === 'prod' ? 500  : 50,
+    HeaderValue: AWS_ENV.account
   },
 
   cognitoAuthorizer: {
     authorizerName: `${PROJECT.prefix}-cognitoAuthorizer`,
-
   }
 } as const;
+
+export const EDGE = {
+  waf: {
+    name: `${PROJECT.prefix}-WebACL`,
+    metricName: `${PROJECT.prefix}-waf`,
+  },
+
+  cloudFrontPolicy: {
+    cachePolicyName: `${PROJECT.prefix}-apiNoCache`,
+    originRequestPolicyName: `${PROJECT.prefix}-apiOrigin`,
+  },
+
+  cloudFrontDistribution: {
+    comment: `${PROJECT.prefix}-Distribution`,
+    HeaderValue: AWS_ENV.account
+  }
+}
 
 export interface AppConfig {
   env: AppEnv;
@@ -201,6 +218,7 @@ export interface AppConfig {
   messaging: typeof MESSAGING;
   compute: typeof COMPUTE;
   gateway: typeof GATEWAY;
+  edge: typeof EDGE;
   tags: typeof TAGS;
 }
 
@@ -215,6 +233,7 @@ export const appConfig: AppConfig = {
   messaging: MESSAGING,
   compute: COMPUTE,
   gateway: GATEWAY,
+  edge: EDGE,
   tags: TAGS,
 };
 
