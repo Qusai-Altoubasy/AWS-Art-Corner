@@ -43,12 +43,11 @@ export class Compute extends Construct {
             memorySize: appConfig.compute.broadCastFunction.memorySize,
             timeout: cdk.Duration.seconds(appConfig.compute.broadCastFunction.timeout),
             environment: {
+                REGION: appConfig.awsEnv.region as string,
                 DB_SECRET_NAME: props.databaseSecret.secretName,
                 DYNAMO_TABLE_NAME: props.shoppingCartTable.tableName,
                 ORDER_QUEUE_URL: props.orderQueue.queueUrl,
-                EMPLOYEES_TOPIC_ARN: props.employeesTopic.topicArn,
-                ADMINS_TOPIC_ARN: props.adminsTopic.topicArn,
-                SPRING_PROFILES_ACTIVE: appConfig.env,
+                ENV: appConfig.env,
             }
         });
 
