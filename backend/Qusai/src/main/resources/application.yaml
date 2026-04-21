@@ -1,0 +1,7 @@
+app:
+  aws:
+    region: ${REGION}
+    dbSecretName: ${DB_SECRET_NAME}
+    dynamoTableName: ${DYNAMO_TABLE_NAME}
+    orderQueueUrl: ${ORDER_QUEUE_URL}
+    env: ${ENV}

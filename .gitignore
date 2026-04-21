@@ -13,6 +13,11 @@ Thumbs.db
 *.war
 *.ear
 .mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
 
 # --- IDEs (IntelliJ, VS Code) ---
 .idea/
@@ -23,6 +28,8 @@ Thumbs.db
 .vscode/
 .history/
 bin/
+out/
+gen/
 
 # --- AWS CDK (TypeScript Specific) ---
 node_modules/
@@ -45,3 +52,6 @@ credentials.json
 *.key
 .aws/
 .serverless/
+
+# Docker
+.docker/
