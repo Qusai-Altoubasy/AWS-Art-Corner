@@ -37,7 +37,7 @@ export class Storage extends Construct {
                     },
                     {
                     storageClass: s3.StorageClass.INFREQUENT_ACCESS,
-                    transitionAfter: cdk.Duration.days(30),
+                    transitionAfter: cdk.Duration.days(90),
                     }
                 ],
                 },
