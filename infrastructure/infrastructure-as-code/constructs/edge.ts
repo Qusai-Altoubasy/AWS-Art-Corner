@@ -9,37 +9,14 @@ import { appConfig } from '../config/config';
 export class Edge extends Construct {
     public readonly distribution: cloudfront.Distribution;
 
-    constructor(scope: Construct, id: string, props: {api: apigateway.RestApi}) {
+    constructor(scope: Construct, id: string, props: {api: apigateway.RestApi, wafArn: string}) {
         super(scope, id);
 
-        const apiCachePolicy = new cloudfront.CachePolicy(this, 'ApiCachePolicy', {
-            cachePolicyName: appConfig.edge.cloudFrontPolicy.cachePolicyName,
-            defaultTtl: cdk.Duration.seconds(0),
-            minTtl: cdk.Duration.seconds(0),
-            maxTtl: cdk.Duration.seconds(0),
-            enableAcceptEncodingGzip: true,
-            enableAcceptEncodingBrotli: true,
-
-            headerBehavior: cloudfront.CacheHeaderBehavior.allowList('Authorization', 'Content-Type'),
-            queryStringBehavior: cloudfront.CacheQueryStringBehavior.all(),
-        });
-
-        const originRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'ApiOriginPolicy', {
-            originRequestPolicyName: appConfig.edge.cloudFrontPolicy.originRequestPolicyName,
-            headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList(
-                'Authorization',
-                'Content-Type',
-                'X-Api-Key',
-                'X-Amz-Date',
-            ),
-            queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-            cookieBehavior: cloudfront.OriginRequestCookieBehavior.none(),
-        });
 
         this.distribution = new cloudfront.Distribution(this, 'Distribution', {
             comment: appConfig.edge.cloudFrontDistribution.comment,
             priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
-            webAclId: cdk.Fn.importValue('SharedWafArn'),
+            webAclId: props.wafArn,
 
             defaultBehavior: {
                 origin: new origins.RestApiOrigin(props.api, {
@@ -49,8 +26,8 @@ export class Edge extends Construct {
                 }),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.HTTPS_ONLY,
                 allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-                cachePolicy: apiCachePolicy,
-                originRequestPolicy: originRequestPolicy,
+                cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+                originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                 compress: true,
             },
         });

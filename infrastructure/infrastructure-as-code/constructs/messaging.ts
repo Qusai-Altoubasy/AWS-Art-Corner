@@ -23,6 +23,7 @@ export class Messaging extends Construct {
         // DLQ
         this.orderDeadLetterQueue = new sqs.Queue(this, 'OrderDLQ',{
             queueName: appConfig.messaging.DLQ.QueueName,
+            fifo: true,
 
             encryption: sqs.QueueEncryption.SQS_MANAGED,
 

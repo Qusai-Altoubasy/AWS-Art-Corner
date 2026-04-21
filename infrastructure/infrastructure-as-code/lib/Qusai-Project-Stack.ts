@@ -8,8 +8,12 @@ import { Compute } from '../constructs/compute';
 import { Gateway } from '../constructs/gateway';
 import { Edge } from '../constructs/edge';
 
+interface QusaiProjectStackProps extends cdk.StackProps {
+  wafArn: string;
+}
+
 export class QusaiProjectStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: QusaiProjectStackProps) {
     super(scope, id, props);
 
     const networking = new Networking(this, 'NetworkingLayer');
@@ -42,6 +46,6 @@ export class QusaiProjectStack extends cdk.Stack {
       broadCastAlias: compute.broadCastAlias
     });
 
-    const edge = new Edge(this, 'EdgeLayer', {api: gateway.api});
+    const edge = new Edge(this, 'EdgeLayer', {api: gateway.api, wafArn: props.wafArn});
   }
 }

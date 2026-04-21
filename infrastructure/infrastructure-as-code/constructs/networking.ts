@@ -36,14 +36,14 @@ export class Networking extends Construct {
     this.lambdaSg = new ec2.SecurityGroup(this, 'LambdaSg', {
       securityGroupName: appConfig.networking.sg.lambda,
       vpc: this.vpc,
-      description:'Lambda functions — compute layer',
+      description:'Lambda functions - compute layer',
       allowAllOutbound:  true,
     });
 
     this.databaseSg = new ec2.SecurityGroup(this, 'DatabaseSg', {
       securityGroupName: appConfig.networking.sg.database,
       vpc: this.vpc,
-      description:'Aurora PostgreSQL & RDS Standby',
+      description:'Aurora PostgreSQL and RDS Standby',
       allowAllOutbound:  false,
     });
 

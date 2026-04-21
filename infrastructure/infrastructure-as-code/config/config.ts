@@ -4,10 +4,10 @@ export type AppEnv = 'dev' | 'prod';
 const ENV = (process.env.APP_ENV ?? 'dev') as AppEnv;
 
 export const PROJECT = {
-  name:       'qusal',
+  name:       'Qusai',
   fullName:   'Qusal-Project',
   env:        ENV,
-  prefix:     `qusal-${ENV}`,
+  prefix:     `qusai-${ENV}`,
 } as const;
 
 export const AWS_ENV: cdk.Environment = {
@@ -86,7 +86,7 @@ export const DYNAMO = {
 
 export const MESSAGING= {
   DLQ:{
-    QueueName : `${PROJECT.prefix}-OrderDLQ`,
+    QueueName : `${PROJECT.prefix}-OrderDLQ.fifo`,
     retentionPeriodDays : 14,
   },
 
@@ -137,7 +137,7 @@ export const MESSAGING= {
 export const COMPUTE = {  
   broadCastFunction: {
     functionName: `${PROJECT.prefix}-broadcast`,
-    ImageAsset: '../../backend',
+    ImageAsset: '../../backend/Qusai',
     memorySize: 2048,
     timeout: 20,
     minCapacity: PROJECT.env == 'prod'? 5: 1,

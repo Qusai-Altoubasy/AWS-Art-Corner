@@ -61,10 +61,12 @@ export class Storage extends Construct {
 
             billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 
-            encryption:    dynamodb.TableEncryption.AWS_MANAGED,
+            encryption: dynamodb.TableEncryption.AWS_MANAGED,
             
-            pointInTimeRecovery: appConfig.dynamo.pointInTimeRecovery,
-            
+            pointInTimeRecoverySpecification: {
+                pointInTimeRecoveryEnabled: appConfig.dynamo.pointInTimeRecovery,
+            },
+
             timeToLiveAttribute: 'ttl',
             
             removalPolicy: appConfig.env === 'prod' ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY,
