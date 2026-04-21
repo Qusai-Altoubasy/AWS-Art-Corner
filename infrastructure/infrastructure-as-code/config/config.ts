@@ -68,8 +68,9 @@ export const DATABASE = {
 } as const;
 
 export const STORAGE = { // S3 
-  archiveBucketName: `${PROJECT.prefix}-archive-${AWS_ENV.account}`,
-  backupBucketName:  `${PROJECT.prefix}-backup-${AWS_ENV.account}`,
+  archiveBucketName: `${PROJECT.prefix}-archive`,
+  backupBucketName:  `${PROJECT.prefix}-backup`,
+  productsImagesBucketName: `${PROJECT.prefix}-products-images`,
 
   nonCurrentVersionExpiration: 30,
 

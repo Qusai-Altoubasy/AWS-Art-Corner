@@ -109,17 +109,6 @@ export class Gateway extends Construct {
                         principals: [new iam.AnyPrincipal()],
                         effect: iam.Effect.ALLOW,
                     }),
-                    new iam.PolicyStatement({
-                        actions: ['execute-api:Invoke'],
-                        resources: ['*'],
-                        principals: [new iam.AnyPrincipal()],
-                        effect: iam.Effect.DENY,
-                        conditions: {
-                            StringNotEquals: {
-                                'aws:Referer': [appConfig.gateway.api.HeaderValue] 
-                            }
-                        }
-                    }),
                 ]
             })
         });

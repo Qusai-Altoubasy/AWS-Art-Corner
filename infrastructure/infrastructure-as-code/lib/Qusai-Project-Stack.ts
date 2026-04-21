@@ -33,6 +33,7 @@ export class QusaiProjectStack extends cdk.Stack {
       databaseSecret: database.secret,
       archiveBucket: storage.archiveBucket,
       backupBucket: storage.backupBucket,
+      productsImagesBucket: storage.productsImagesBucket,
       shoppingCartTable: storage.shoppingCartTable,
       orderQueue: messaging.orderQueue,
       employeesTopic: messaging.employeesTopic,
@@ -46,6 +47,10 @@ export class QusaiProjectStack extends cdk.Stack {
       broadCastAlias: compute.broadCastAlias
     });
 
-    const edge = new Edge(this, 'EdgeLayer', {api: gateway.api, wafArn: props.wafArn});
+    const edge = new Edge(this, 'EdgeLayer', {
+      api: gateway.api,
+      wafArn: props.wafArn,
+      productsImagesBucket: storage.productsImagesBucket
+    });
   }
 }

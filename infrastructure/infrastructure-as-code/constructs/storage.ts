@@ -5,6 +5,7 @@ import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
 export class Storage extends Construct {
+    public readonly productsImagesBucket: s3.Bucket;
     public readonly archiveBucket: s3.Bucket;
     public readonly backupBucket: s3.Bucket;
     public readonly shoppingCartTable: dynamodb.Table;
@@ -12,6 +13,37 @@ export class Storage extends Construct {
     constructor(scope: Construct, id: string) {
         super(scope, id);
     
+        this.productsImagesBucket = new s3.Bucket(this, 'ImagesBucket', {
+            bucketName: appConfig.storage.productsImagesBucketName,
+
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            versioned: appConfig.storage.versioning,
+
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+
+            removalPolicy:
+                appConfig.env === 'prod'
+                ? cdk.RemovalPolicy.RETAIN
+                : cdk.RemovalPolicy.DESTROY,
+
+            autoDeleteObjects: appConfig.env !== 'prod',
+
+            lifecycleRules: [
+                {
+                transitions: [
+                    {
+                    storageClass: s3.StorageClass.INTELLIGENT_TIERING,
+                    transitionAfter: cdk.Duration.days(30),
+                    },
+                    {
+                    storageClass: s3.StorageClass.INFREQUENT_ACCESS,
+                    transitionAfter: cdk.Duration.days(30),
+                    }
+                ],
+                },
+            ],
+        });
+
         this.archiveBucket = new s3.Bucket(this, 'ArchiveBucket', {
             bucketName: appConfig.storage.archiveBucketName,
             encryption: s3.BucketEncryption.S3_MANAGED,

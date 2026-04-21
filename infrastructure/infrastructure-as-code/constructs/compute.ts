@@ -17,6 +17,7 @@ export interface ComputeProps {
   databaseSecret: rds.DatabaseSecret;
   archiveBucket: s3.Bucket;
   backupBucket: s3.Bucket;
+  productsImagesBucket: s3.Bucket;
   shoppingCartTable: dynamodb.Table;
   orderQueue: sqs.Queue;
   employeesTopic: sns.Topic;
@@ -130,6 +131,7 @@ export class Compute extends Construct {
         props.orderQueue.grantSendMessages(this.broadCastFunction);
         props.employeesTopic.grantPublish(this.broadCastFunction);
         props.adminsTopic.grantPublish(this.broadCastFunction);
+        props.productsImagesBucket.grantPut(this.broadCastFunction);
 
         props.orderQueue.grantConsumeMessages(this.notificationLambda);
         props.employeesTopic.grantPublish(this.notificationLambda);
