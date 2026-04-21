@@ -8,7 +8,7 @@ import { appConfig } from '../config/config';
 export interface edgeProps{
     api: apigateway.RestApi,
     wafArn: string,
-    productsImagesBucket: s3.Bucket;
+    productsImagesBucket: s3.IBucket;
 }
 export class Edge extends Construct {
     public readonly distribution: cloudfront.Distribution;

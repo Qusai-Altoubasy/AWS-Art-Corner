@@ -15,14 +15,14 @@ export interface ComputeProps {
   vpc: ec2.IVpc;
   lambdaSg: ec2.ISecurityGroup;
   databaseSecret: rds.DatabaseSecret;
-  archiveBucket: s3.Bucket;
-  backupBucket: s3.Bucket;
-  productsImagesBucket: s3.Bucket;
-  shoppingCartTable: dynamodb.Table;
-  orderQueue: sqs.Queue;
-  employeesTopic: sns.Topic;
-  adminsTopic: sns.Topic;
-  databaseCluster: rds.DatabaseCluster;
+  archiveBucket: s3.IBucket;
+  backupBucket: s3.IBucket;
+  productsImagesBucket: s3.IBucket;
+  shoppingCartTable: dynamodb.ITable;
+  orderQueue: sqs.IQueue;
+  employeesTopic: sns.ITopic;
+  adminsTopic: sns.ITopic;
+  databaseCluster: rds.IDatabaseCluster;
 }
 
 export class Compute extends Construct {

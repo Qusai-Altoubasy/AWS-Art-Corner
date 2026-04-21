@@ -11,7 +11,7 @@ export class Gateway extends Construct {
     private readonly userPoolClient: cognito.UserPoolClient;
     public readonly api: apigateway.RestApi;
 
-    constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.Alias}) {
+    constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.IAlias}) {
         super(scope, id);
         
         this.userPool = new cognito.UserPool(this, 'UserPool', {
