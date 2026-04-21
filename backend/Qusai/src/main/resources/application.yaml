@@ -4,4 +4,5 @@ app:
     dbSecretName: ${DB_SECRET_NAME}
     dynamoTableName: ${DYNAMO_TABLE_NAME}
     orderQueueUrl: ${ORDER_QUEUE_URL}
+    productsImagesbucketName: ${PRODUCTS_IMAGES_BUCKET_NAME}
     env: ${ENV}

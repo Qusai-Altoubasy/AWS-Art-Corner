@@ -26,6 +26,7 @@ public class AppProperties {
         @NotBlank private String dbSecretName;
         @NotBlank private String dynamoTableName;
         @NotBlank private String orderQueueUrl;
+        @NotBlank private String productsImagesbucketName;
         @NotBlank private String env;
     }
 

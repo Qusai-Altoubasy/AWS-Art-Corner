@@ -48,6 +48,7 @@ export class Compute extends Construct {
                 DB_SECRET_NAME: props.databaseSecret.secretName,
                 DYNAMO_TABLE_NAME: props.shoppingCartTable.tableName,
                 ORDER_QUEUE_URL: props.orderQueue.queueUrl,
+                PRODUCTS_IMAGES_BUCKET_NAME: props.productsImagesBucket.bucketName,
                 ENV: appConfig.env,
             }
         });
