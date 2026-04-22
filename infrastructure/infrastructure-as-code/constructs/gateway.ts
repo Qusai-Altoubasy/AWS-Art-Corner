@@ -11,7 +11,7 @@ export class Gateway extends Construct {
     private readonly userPoolClient: cognito.UserPoolClient;
     public readonly api: apigateway.RestApi;
 
-    constructor(scope: Construct, id: string, props: {broadCastAlias: lambda.IAlias}) {
+    constructor(scope: Construct, id: string, props: {broadCastFunction: lambda.IFunction}) {
         super(scope, id);
         
         this.userPool = new cognito.UserPool(this, 'UserPool', {
@@ -120,7 +120,7 @@ export class Gateway extends Construct {
             resultsCacheTtl: cdk.Duration.minutes(5),
         });
 
-        const broadCastIntegration = new apigateway.LambdaIntegration(props.broadCastAlias,{
+        const broadCastIntegration = new apigateway.LambdaIntegration(props.broadCastFunction,{
             proxy:   true,
             timeout: cdk.Duration.seconds(29),
         });

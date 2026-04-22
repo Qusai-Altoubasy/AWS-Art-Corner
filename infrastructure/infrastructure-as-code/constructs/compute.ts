@@ -22,12 +22,12 @@ export interface ComputeProps {
   orderQueue: sqs.IQueue;
   employeesTopic: sns.ITopic;
   adminsTopic: sns.ITopic;
-  databaseCluster: rds.IDatabaseCluster;
+  databaseInstance: rds.IDatabaseInstance;
 }
 
 export class Compute extends Construct {
     public readonly broadCastFunction: lambda.DockerImageFunction;
-    public readonly broadCastAlias: lambda.Alias;
+    // public readonly broadCastAlias: lambda.Alias;
     public readonly notificationLambda: lambda.Function;
     public readonly archiveWorker: lambda.Function;
     public readonly backupWorker: lambda.Function;
@@ -53,20 +53,20 @@ export class Compute extends Construct {
             }
         });
 
-        this.broadCastAlias = new lambda.Alias(this, 'BroadCastAlias', {
-            aliasName: appConfig.env,
-            version: this.broadCastFunction.currentVersion,
-            provisionedConcurrentExecutions: appConfig.compute.broadCastFunction.minCapacity,
-        });
+        // this.broadCastAlias = new lambda.Alias(this, 'BroadCastAlias', {
+        //     aliasName: appConfig.env,
+        //     version: this.broadCastFunction.currentVersion,
+        //     provisionedConcurrentExecutions: appConfig.compute.broadCastFunction.minCapacity,
+        // });
 
-        const scalingTarget = this.broadCastAlias.addAutoScaling({
-            minCapacity: appConfig.compute.broadCastFunction.minCapacity,
-            maxCapacity: appConfig.compute.broadCastFunction.maxCapacity,
-        });
+        // const scalingTarget = this.broadCastAlias.addAutoScaling({
+        //     minCapacity: appConfig.compute.broadCastFunction.minCapacity,
+        //     maxCapacity: appConfig.compute.broadCastFunction.maxCapacity,
+        // });
 
-        scalingTarget.scaleOnUtilization({
-            utilizationTarget: 0.6,
-        });
+        // scalingTarget.scaleOnUtilization({
+        //     utilizationTarget: 0.6,
+        // });
 
         this.notificationLambda = new lambda.Function(this, 'NotificationLambda', {
             functionName: appConfig.compute.notificationLambda.functionName,
@@ -120,7 +120,7 @@ export class Compute extends Construct {
             environment: {
                 DB_SECRET_NAME: props.databaseSecret.secretName,
                 BACKUP_BUCKET_NAME: props.backupBucket.bucketName,
-                DB_CLUSTER_IDENTIFIER: props.databaseCluster.clusterIdentifier,
+                DB_CLUSTER_IDENTIFIER: props.databaseInstance.instanceIdentifier,
             },
         });
 
@@ -148,7 +148,7 @@ export class Compute extends Construct {
                 "rds:CreateDBClusterSnapshot",
                 "rds:DescribeDBClusters"
             ],
-            resources: [props.databaseCluster.clusterArn],
+            resources: [props.databaseInstance.instanceArn],
             effect: iam.Effect.ALLOW,
         }));
 

@@ -9,7 +9,7 @@ import { Gateway } from '../constructs/gateway';
 import { Edge } from '../constructs/edge';
 
 interface QusaiProjectStackProps extends cdk.StackProps {
-  wafArn: string;
+  // wafArn: string;
 }
 
 export class QusaiProjectStack extends cdk.Stack {
@@ -38,18 +38,18 @@ export class QusaiProjectStack extends cdk.Stack {
       orderQueue: messaging.orderQueue,
       employeesTopic: messaging.employeesTopic,
       adminsTopic: messaging.adminsTopic,
-      databaseCluster: database.cluster
+      databaseInstance: database.DatabaseInstance
     });
 
     messaging.addMaintenanceTargets(compute.archiveWorker, compute.backupWorker);
 
     const gateway = new Gateway(this, 'GatewayLayer',{
-      broadCastAlias: compute.broadCastAlias
+      broadCastFunction: compute.broadCastFunction
     });
 
     const edge = new Edge(this, 'EdgeLayer', {
       api: gateway.api,
-      wafArn: props.wafArn,
+      // wafArn: props.wafArn,
       productsImagesBucket: storage.productsImagesBucket
     });
   }

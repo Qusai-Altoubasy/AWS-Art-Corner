@@ -49,8 +49,8 @@ export const NETWORKING = {
 } as const;
 
 export const DATABASE = {
-  clusterIdentifier: `${PROJECT.prefix}-aurora-cluster`,
-  instanceIdentifier: `${PROJECT.prefix}-aurora-instance`,
+  // clusterIdentifier: `${PROJECT.prefix}-aurora-cluster`,
+  instanceIdentifier: `${PROJECT.prefix}-postgres-instance`,
   standbyIdentifier:  `${PROJECT.prefix}-standby-rds`,
  
   databaseName: 'qusaidb',
@@ -82,7 +82,7 @@ export const DYNAMO = {
 
   partitionKey: 'customerId',
   sortKey: 'productId',
-  pointInTimeRecovery: true,
+  pointInTimeRecovery: false,
 } as const;
 
 export const MESSAGING= {
@@ -139,7 +139,7 @@ export const COMPUTE = {
   broadCastFunction: {
     functionName: `${PROJECT.prefix}-broadcast`,
     ImageAsset: '../../backend/Qusai',
-    memorySize: 2048,
+    memorySize: 512,
     timeout: 20,
     minCapacity: PROJECT.env == 'prod'? 5: 1,
     maxCapacity: PROJECT.env == "prod"? 1000: 5
@@ -148,7 +148,7 @@ export const COMPUTE = {
   notificationLambda: {
     functionName: `${PROJECT.prefix}-notificationService`,
     handler: 'main.handler',
-    codeAsset: './src/notification-service',
+    codeAsset: '../../backend/lambdas/notification-service',
     timeout: 30,
     memorySize: 512,
   },
@@ -156,7 +156,7 @@ export const COMPUTE = {
   archiveWorker: {
     functionName: `${PROJECT.prefix}-archiveWorker`,
     handler: 'main.handler',
-    codeAsset: './src/archive-worker',
+    codeAsset: '../../backend/lambdas/archive-worker',
     timeout: 10,
     memorySize: 512,
   },
@@ -164,7 +164,7 @@ export const COMPUTE = {
   backupWorker: {
     functionName: `${PROJECT.prefix}-backupWorker`,
     handler: 'main.handler',
-    codeAsset: './src/backup-worker',
+    codeAsset: '../../backend/lambdas/backup-worker',
     timeout: 15,
     memorySize: 512,
   }

@@ -21,8 +21,7 @@ export class Storage extends Construct {
 
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 
-            removalPolicy:
-                appConfig.env === 'prod'
+            removalPolicy: appConfig.env === 'prod'
                 ? cdk.RemovalPolicy.RETAIN
                 : cdk.RemovalPolicy.DESTROY,
 
@@ -32,13 +31,13 @@ export class Storage extends Construct {
                 {
                 transitions: [
                     {
-                    storageClass: s3.StorageClass.INTELLIGENT_TIERING,
+                    storageClass: s3.StorageClass.INFREQUENT_ACCESS,
                     transitionAfter: cdk.Duration.days(30),
                     },
-                    {
-                    storageClass: s3.StorageClass.INFREQUENT_ACCESS,
-                    transitionAfter: cdk.Duration.days(90),
-                    }
+                    // {
+                    // storageClass: s3.StorageClass.INTELLIGENT_TIERING,
+                    // transitionAfter: cdk.Duration.days(90),
+                    // }
                 ],
                 },
             ],

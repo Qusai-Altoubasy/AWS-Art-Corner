@@ -7,7 +7,7 @@ import { appConfig } from '../config/config';
 
 export interface edgeProps{
     api: apigateway.RestApi,
-    wafArn: string,
+    // wafArn: string,
     productsImagesBucket: s3.IBucket;
 }
 export class Edge extends Construct {
@@ -23,7 +23,7 @@ export class Edge extends Construct {
         this.distribution = new cloudfront.Distribution(this, 'Distribution', {
             comment: appConfig.edge.cloudFrontDistribution.comment,
             priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
-            webAclId: props.wafArn,
+            // webAclId: props.wafArn,
 
             defaultBehavior: {
                 origin: apiOrigin,
