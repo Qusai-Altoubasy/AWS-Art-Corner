@@ -6,3 +6,8 @@ app:
     orderQueueUrl: ${APP_AWS_ORDER_QUEUE_URL}
     productsImagesBucketName: ${APP_AWS_PRODUCTS_IMAGES_BUCKET_NAME}
     env: ${APP_AWS_ENV}
+
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

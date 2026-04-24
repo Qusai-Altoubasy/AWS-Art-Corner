@@ -1,4 +1,4 @@
-package com.artcorner.erp;
+package com.artcorner.erp.app;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

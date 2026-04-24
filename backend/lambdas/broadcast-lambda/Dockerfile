@@ -13,4 +13,4 @@ RUN microdnf install -y unzip
 COPY --from=build /app/target/*-bin.zip /tmp/bundle.zip
 RUN unzip /tmp/bundle.zip -d ${LAMBDA_TASK_ROOT} && rm /tmp/bundle.zip
 
-CMD ["com.artcorner.erp.LambdaHandler::handleRequest"]
+CMD ["com.artcorner.erp.handler.LambdaHandler::handleRequest"]
