@@ -1,4 +1,4 @@
-package com.qusai.erp.config;
+package com.artcorner.erp.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

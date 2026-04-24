@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/Qusai-Project.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/artcorner.ts",
   "watch": {
     "include": [
       "**"

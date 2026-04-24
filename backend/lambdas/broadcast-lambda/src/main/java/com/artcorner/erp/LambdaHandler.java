@@ -1,4 +1,4 @@
-package com.qusai.erp;
+package com.artcorner.erp;
 
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
@@ -17,7 +17,7 @@ public class LambdaHandler implements RequestStreamHandler {
 
     static {
         try {
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(ErpApplication.class);
+            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(SpringApplication.class);
         } catch (ContainerInitializationException e) {
             throw new RuntimeException("Could not initialize Spring Boot application", e);
         }

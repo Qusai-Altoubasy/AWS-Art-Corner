@@ -1,4 +1,4 @@
-package com.qusai.erp.config;
+package com.artcorner.erp.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
     private final AppProperties appProperties;
     private final SecretsManagerClient secretsManagerClient;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public DataSource dataSource() {

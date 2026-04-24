@@ -4,10 +4,10 @@ export type AppEnv = 'dev' | 'prod';
 const ENV = (process.env.APP_ENV ?? 'dev') as AppEnv;
 
 export const PROJECT = {
-  name:       'Qusai',
-  fullName:   'Qusal-Project',
-  env:        ENV,
-  prefix:     `qusai-${ENV}`,
+  name: 'ArtCorner',
+  fullName: 'ArtCorner-ERP',
+  env: ENV,
+  prefix: `artcorner-${ENV}`,
 } as const;
 
 export const AWS_ENV: cdk.Environment = {
@@ -53,13 +53,13 @@ export const DATABASE = {
   instanceIdentifier: `${PROJECT.prefix}-postgres-instance`,
   standbyIdentifier:  `${PROJECT.prefix}-standby-rds`,
  
-  databaseName: 'qusaidb',
+  databaseName: 'artcorner',
   port: 5432,
   minCapacity: ENV === 'prod' ? 2: 0.5,
   maxCapacity: ENV === 'prod' ? 16: 4,
  
   // Secrets Manager secret name
-  secretName: `${PROJECT.prefix}/aurora/credentials`,
+  secretName: `${PROJECT.prefix}-postgres-credentials`,
  
   // Backup & maintenance
   backupRetentionDays: ENV === 'prod' ? 14 : 3,
@@ -138,9 +138,9 @@ export const MESSAGING= {
 export const COMPUTE = {  
   broadCastFunction: {
     functionName: `${PROJECT.prefix}-broadcast`,
-    ImageAsset: '../../backend/Qusai',
-    memorySize: 512,
-    timeout: 20,
+    ImageAsset: '../../backend/lambdas/broadcast-lambda',
+    memorySize: 3008,
+    timeout: 60,
     minCapacity: PROJECT.env == 'prod'? 5: 1,
     maxCapacity: PROJECT.env == "prod"? 1000: 5
   },

@@ -12,8 +12,8 @@ export class Database extends Construct {
   constructor(scope: Construct, id: string, props: {vpc: ec2.IVpc, databaseSg: ec2.ISecurityGroup}) {
     super(scope, id);
 
-    this.secret = new rds.DatabaseSecret(this, 'AuroraSecret', {
-      username: 'qusai',
+    this.secret = new rds.DatabaseSecret(this, 'PostgresSecret', {
+      username: 'artcorner_admin',
       secretName: appConfig.database.secretName,
     });
 

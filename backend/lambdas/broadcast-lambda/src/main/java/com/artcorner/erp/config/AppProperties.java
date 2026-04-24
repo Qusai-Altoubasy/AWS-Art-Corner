@@ -1,4 +1,4 @@
-package com.qusai.erp.config;
+package com.artcorner.erp.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,7 +26,7 @@ public class AppProperties {
         @NotBlank private String dbSecretName;
         @NotBlank private String dynamoTableName;
         @NotBlank private String orderQueueUrl;
-        @NotBlank private String productsImagesbucketName;
+        @NotBlank private String productsImagesBucketName;
         @NotBlank private String env;
     }
 

@@ -1,0 +1,8 @@
+app:
+  aws:
+    region: ${APP_AWS_REGION}
+    dbSecretName: ${APP_AWS_DB_SECRET_NAME}
+    dynamoTableName: ${APP_AWS_DYNAMO_TABLE_NAME}
+    orderQueueUrl: ${APP_AWS_ORDER_QUEUE_URL}
+    productsImagesBucketName: ${APP_AWS_PRODUCTS_IMAGES_BUCKET_NAME}
+    env: ${APP_AWS_ENV}

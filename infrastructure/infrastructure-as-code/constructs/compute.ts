@@ -44,12 +44,12 @@ export class Compute extends Construct {
             memorySize: appConfig.compute.broadCastFunction.memorySize,
             timeout: cdk.Duration.seconds(appConfig.compute.broadCastFunction.timeout),
             environment: {
-                REGION: appConfig.awsEnv.region as string,
-                DB_SECRET_NAME: props.databaseSecret.secretName,
-                DYNAMO_TABLE_NAME: props.shoppingCartTable.tableName,
-                ORDER_QUEUE_URL: props.orderQueue.queueUrl,
-                PRODUCTS_IMAGES_BUCKET_NAME: props.productsImagesBucket.bucketName,
-                ENV: appConfig.env,
+                APP_AWS_REGION: appConfig.awsEnv.region as string,
+                APP_AWS_DB_SECRET_NAME: props.databaseSecret.secretName,
+                APP_AWS_DYNAMO_TABLE_NAME: props.shoppingCartTable.tableName,
+                APP_AWS_ORDER_QUEUE_URL: props.orderQueue.queueUrl,
+                APP_AWS_PRODUCTS_IMAGES_BUCKET_NAME: props.productsImagesBucket.bucketName,
+                APP_AWS_ENV: appConfig.env,
             }
         });
 

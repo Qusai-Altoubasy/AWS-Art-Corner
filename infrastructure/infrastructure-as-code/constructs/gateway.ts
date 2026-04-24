@@ -67,7 +67,7 @@ export class Gateway extends Construct {
 
             authFlows: {
                 userSrp: true,
-                userPassword: false
+                userPassword: true
             },
 
             accessTokenValidity: cdk.Duration.minutes(appConfig.gateway.userPoolClient.accessTokenValidity),

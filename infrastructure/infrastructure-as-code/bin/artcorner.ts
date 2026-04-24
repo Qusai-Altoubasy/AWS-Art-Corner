@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
-import { QusaiProjectStack } from '../lib/Qusai-Project-Stack';
+import { ArtCornerStack } from '../lib/ArtCornerStack';
 import { appConfig } from '../config/config';
 import { WafStack } from '../lib/waf-stack';
 
@@ -11,7 +11,7 @@ const app = new cdk.App();
 //     env: appConfig.wafEnv
 // });
 
-new QusaiProjectStack(app, 'MainStack', {
+new ArtCornerStack(app, 'MainStack', {
     stackName: `${appConfig.project.prefix}-stack`,
     env: appConfig.awsEnv,
     // crossRegionReferences: true,
