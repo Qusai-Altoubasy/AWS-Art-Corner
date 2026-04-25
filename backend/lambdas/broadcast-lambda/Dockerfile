@@ -1,4 +1,4 @@
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -9,8 +9,8 @@ RUN mvn clean package -DskipTests
 
 FROM public.ecr.aws/lambda/java:21
 
-RUN microdnf install -y unzip
-COPY --from=build /app/target/*-bin.zip /tmp/bundle.zip
-RUN unzip /tmp/bundle.zip -d ${LAMBDA_TASK_ROOT} && rm /tmp/bundle.zip
+WORKDIR ${LAMBDA_TASK_ROOT}
 
-CMD ["com.artcorner.erp.handler.LambdaHandler::handleRequest"]
+COPY --from=build /app/target/erp-0.0.1-SNAPSHOT.jar ${LAMBDA_TASK_ROOT}/lib/app.jar
+
+CMD ["com.artcorner.erp.LambdaHandler::handleRequest"]

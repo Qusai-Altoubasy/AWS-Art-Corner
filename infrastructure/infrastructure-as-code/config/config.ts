@@ -139,7 +139,7 @@ export const COMPUTE = {
   broadCastFunction: {
     functionName: `${PROJECT.prefix}-broadcast`,
     ImageAsset: '../../backend/lambdas/broadcast-lambda',
-    memorySize: 3008,
+    memorySize: 1024,
     timeout: 60,
     minCapacity: PROJECT.env == 'prod'? 5: 1,
     maxCapacity: PROJECT.env == "prod"? 1000: 5

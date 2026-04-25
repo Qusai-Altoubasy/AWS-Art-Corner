@@ -1,4 +1,4 @@
-package com.artcorner.erp.handler;
+package com.artcorner.erp;
 
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
@@ -6,7 +6,6 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.artcorner.erp.app.SpringApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +17,7 @@ public class LambdaHandler implements RequestStreamHandler {
 
     static {
         try {
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(SpringApplication.class);
+            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(BroadcastLambdaApplication.class);
         } catch (ContainerInitializationException e) {
             throw new RuntimeException("Could not initialize Spring Boot application", e);
         }
