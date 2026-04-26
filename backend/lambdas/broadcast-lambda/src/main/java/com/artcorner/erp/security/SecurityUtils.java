@@ -19,4 +19,8 @@ public class SecurityUtils {
     public String getCurrentUserEmail() {
         return getCurrentUser().getEmail();
     }
+
+    public String getCurrentUserRole() {
+        return getCurrentUser().getRoles();
+    }
 }

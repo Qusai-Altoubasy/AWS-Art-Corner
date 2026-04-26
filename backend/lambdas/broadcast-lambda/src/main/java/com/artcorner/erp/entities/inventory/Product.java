@@ -1,4 +1,4 @@
-package com.artcorner.erp.entities.products;
+package com.artcorner.erp.entities.inventory;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;

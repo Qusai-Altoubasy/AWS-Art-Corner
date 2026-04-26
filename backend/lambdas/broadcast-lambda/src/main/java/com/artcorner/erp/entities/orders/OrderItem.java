@@ -1,6 +1,6 @@
 package com.artcorner.erp.entities.orders;
 
-import com.artcorner.erp.entities.products.Product;
+import com.artcorner.erp.entities.inventory.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
