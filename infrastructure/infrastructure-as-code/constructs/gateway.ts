@@ -16,6 +16,8 @@ export class Gateway extends Construct {
         
         this.userPool = new cognito.UserPool(this, 'UserPool', {
             userPoolName: appConfig.gateway.userPool.userPoolName,
+            selfSignUpEnabled: true,
+            
             signInAliases: {
                 email:    true,
                 username: false,
