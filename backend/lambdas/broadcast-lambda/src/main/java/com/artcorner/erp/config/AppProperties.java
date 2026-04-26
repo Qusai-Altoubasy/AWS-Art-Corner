@@ -18,6 +18,9 @@ public class AppProperties {
     private Aws aws = new Aws();
 
     @NotNull
+    private Security security = new Security();
+
+    @NotNull
     private Business business = new Business();
 
     @Data
@@ -31,7 +34,13 @@ public class AppProperties {
     }
 
     @Data
+    public static class Security{
+        private String COGNITO_CLAIMS_ATTRIBUTE =
+                "com.amazonaws.serverless.proxy.model.CognitoAuthorizerClaims";
+    }
+
+    @Data
     public static class Business {
-        private int stockAlertThreshold = 1000;
+        private int STOCK_ALERT_THRESHOLD = 1000;
     }
 }

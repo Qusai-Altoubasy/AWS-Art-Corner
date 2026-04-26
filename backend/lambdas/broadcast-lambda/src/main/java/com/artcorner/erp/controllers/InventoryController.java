@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-public class products {
+public class InventoryController {
 
     @GetMapping
     public ResponseEntity<String> getProducts() {

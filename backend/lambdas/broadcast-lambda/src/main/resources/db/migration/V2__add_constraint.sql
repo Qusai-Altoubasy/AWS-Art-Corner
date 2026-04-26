@@ -1,0 +1,7 @@
+ALTER TABLE users
+    ADD CONSTRAINT check_user_role
+    CHECK (role IN ('Admin', 'employee', 'customer'));
+
+ALTER TABLE orders
+    ADD CONSTRAINT check_order_status
+    CHECK (status IN ('PENDING', 'CANCELED', 'ACCEPTED', 'PROCESSING', 'READY', 'DELIVERING', 'COMPLETED'));
