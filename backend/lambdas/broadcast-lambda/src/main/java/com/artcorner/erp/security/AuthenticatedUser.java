@@ -3,7 +3,6 @@ package com.artcorner.erp.security;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -11,5 +10,5 @@ import java.util.UUID;
 public class AuthenticatedUser {
     private UUID userId;
     private String email;
-    private List<String> roles;
+    private String roles;
 }

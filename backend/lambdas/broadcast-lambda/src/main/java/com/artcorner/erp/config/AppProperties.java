@@ -35,8 +35,8 @@ public class AppProperties {
 
     @Data
     public static class Security{
-        private String COGNITO_CLAIMS_ATTRIBUTE =
-                "com.amazonaws.serverless.proxy.model.CognitoAuthorizerClaims";
+        private String API_GATEWAY_CONTEXT_ATTRIBUTE =
+                "com.amazonaws.apigateway.request.context";
     }
 
     @Data

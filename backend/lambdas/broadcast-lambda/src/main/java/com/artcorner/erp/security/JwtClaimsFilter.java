@@ -1,5 +1,8 @@
 package com.artcorner.erp.security;
 
+import com.amazonaws.serverless.proxy.model.ApiGatewayAuthorizerContext;
+import com.amazonaws.serverless.proxy.model.AwsProxyRequestContext;
+import com.amazonaws.serverless.proxy.model.CognitoAuthorizerClaims;
 import com.artcorner.erp.config.AppProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,8 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -25,49 +28,51 @@ public class JwtClaimsFilter extends OncePerRequestFilter {
     private final AppProperties appProperties;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        Map<String, Object> claims = (Map<String, Object>)
-                request.getAttribute(appProperties.getSecurity().getCOGNITO_CLAIMS_ATTRIBUTE());
+        Object contextObj = request.getAttribute(appProperties.getSecurity().getAPI_GATEWAY_CONTEXT_ATTRIBUTE());
 
-        if (isValidClaims(claims)) {
-            setUpAuthentication(claims);
+        if (contextObj instanceof AwsProxyRequestContext context) {
+            ApiGatewayAuthorizerContext authorizer = context.getAuthorizer();
+
+            if (authorizer != null) {
+                CognitoAuthorizerClaims claims = authorizer.getClaims();
+
+                if (claims != null) {
+                    setUpAuthentication(claims);
+                }
+            }
         }
-
         filterChain.doFilter(request, response);
     }
 
-    private boolean isValidClaims(Map<String, Object> claims) {
-        return claims != null &&
-                claims.containsKey("sub") &&
-                claims.containsKey("email");
-    }
+    private void setUpAuthentication(CognitoAuthorizerClaims claims) {
+        String sub = claims.getSubject();
+        String email = claims.getEmail();
+        String role = claims.getClaim("cognito:groups");
 
-    private void setUpAuthentication(Map<String, Object> claims) {
-        String sub = (String) claims.get("sub");
-        String email = (String) claims.get("email");
-        List<String> roles = extractRoles(claims.get("cognito:groups"));
+        if (!isValidClaims(sub, email)) {
+            return;
+        }
 
-        AuthenticatedUser user = new AuthenticatedUser(UUID.fromString(sub), email, roles);
+        AuthenticatedUser user = new AuthenticatedUser(
+                UUID.fromString(sub),
+                email,
+                role
+        );
 
-        var authorities = roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
-                .toList();
+        List <SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
 
         var auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
+
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
-    private List<String> extractRoles(Object groupsObj) {
-        if (groupsObj instanceof String role) {
-            return List.of(role);
-        } else if (groupsObj instanceof List<?> roleList) {
-            return roleList.stream().map(Object::toString).toList();
-        }
-        return List.of();
+    private boolean isValidClaims(String sub, String email) {
+        return sub != null && email != null;
     }
 }
