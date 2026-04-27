@@ -2,7 +2,6 @@ package com.artcorner.erp.services.users;
 
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
 import com.artcorner.erp.dto.response.users.UserResponse;
-import com.artcorner.erp.entities.users.Address;
 import com.artcorner.erp.entities.users.User;
 import com.artcorner.erp.entities.users.UserRole;
 import com.artcorner.erp.exceptions.UserNotFoundException;

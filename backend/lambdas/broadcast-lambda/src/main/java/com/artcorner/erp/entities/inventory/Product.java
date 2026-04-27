@@ -6,11 +6,13 @@ import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
+@SQLRestriction("is_active = true")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

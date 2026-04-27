@@ -3,6 +3,7 @@ package com.artcorner.erp.dto.response.inventory;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,19 +13,19 @@ public class ProductRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @NotNull
     @DecimalMin(value = "0.0")
     private BigDecimal price;
 
-    @NotBlank
+    @NotNull
     @DecimalMin(value = "0.0")
     private BigDecimal cost;
 
-    @NotBlank
+    @NotNull
     @Min(value = 0)
     private Integer stock;
 
-    @NotBlank
+    @NotNull
     @Min(value = 0)
     private Integer stockThreshold;
 }
