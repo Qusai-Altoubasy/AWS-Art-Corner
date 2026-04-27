@@ -40,6 +40,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Object> handleProductNotFoundException(ProductNotFoundException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "PRODUCT_NOT_FOUND",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidation(
             MethodArgumentNotValidException ex, HttpServletRequest request) {

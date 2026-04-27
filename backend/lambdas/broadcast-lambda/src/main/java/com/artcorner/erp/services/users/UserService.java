@@ -55,8 +55,7 @@ public class UserService {
     public List<UserResponse> getAllUsersByRole(UserRole role){
         List<User> users = userRepository.findByRole(role);
 
-        return users.stream().map(mapping::mapToResponse
-        ).toList();
+        return users.stream().map(mapping::mapToResponse).toList();
     }
 
     public void activation(UUID id, boolean active) {
