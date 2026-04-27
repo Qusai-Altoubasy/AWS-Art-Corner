@@ -28,4 +28,13 @@ public class CartRepository {
         Key key = Key.builder().partitionValue(customerId).sortValue(productId).build();
         cartTable.deleteItem(key);
     }
+
+    public CartItem findByCustomerIdAndProductId(String customerId, String productId) {
+        Key key = Key.builder()
+                .partitionValue(customerId)
+                .sortValue(productId)
+                .build();
+
+        return cartTable.getItem(key);
+    }
 }

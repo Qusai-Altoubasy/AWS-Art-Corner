@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -19,22 +20,22 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/item")
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<String> addToCart(@Valid @RequestBody CartItemRequest cartItemRequest) {
-        cartService.addItemToCart(cartItemRequest);
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<String> addToCart(@RequestParam(required = false) UUID customerId, @Valid @RequestBody CartItemRequest cartItemRequest) {
+        cartService.addItemToCart(customerId, cartItemRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Item added Successfully");
     }
 
     @GetMapping("/items")
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<List<CartItemResponse>> getCartItems() {
-        return ResponseEntity.ok(cartService.getCartItems());
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<List<CartItemResponse>> getCartItems(@RequestParam(required = false) UUID customerId) {
+        return ResponseEntity.ok(cartService.getCartItems(customerId));
     }
 
     @DeleteMapping("/item/{productId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<Void> removeFromCart(@PathVariable String productId) {
-        cartService.removeFromCart(productId);
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<Void> removeFromCart(@RequestParam(required = false) UUID customerId, @PathVariable String productId) {
+        cartService.removeFromCart(customerId, productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

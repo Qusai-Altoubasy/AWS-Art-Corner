@@ -11,22 +11,20 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class CartOrchestrator {
     private final InventoryService inventoryService;
-    private final SecurityUtils securityUtils;
     private final CartItemMapper cartItemMapper;
     private static final int SCALE = 3;
 
 
-    public CartItem prepareCartItem(CartItemRequest request){
+    public CartItem prepareCartItem(String customerId, CartItemRequest request){
         Product product = inventoryService.findProductById(request.getProductId());
 
         validation(product, request.getQuantity());
-
-        String customerId = securityUtils.getCurrentUserId().toString();
 
         BigDecimal price = calculatePrice(product.getPrice(), request.getQuantity());
 
