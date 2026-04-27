@@ -6,7 +6,7 @@ import com.artcorner.erp.entities.inventory.Product;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Mapping {
+public class InventoryMapping {
     public AdminProductsResponse mapToAdminResponse(Product product) {
         if (product == null) {
             return null;

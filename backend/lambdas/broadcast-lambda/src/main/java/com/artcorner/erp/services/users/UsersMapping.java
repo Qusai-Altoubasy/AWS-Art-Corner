@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class Mapping {
+public class UsersMapping {
 
     public User mapToUserEntity(RegisterUserRequest request, UUID userId, String email, UserRole role) {
         if (request == null) {

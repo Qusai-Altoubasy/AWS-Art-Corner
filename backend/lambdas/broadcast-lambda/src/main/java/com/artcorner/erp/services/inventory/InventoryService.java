@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
-    private final Mapping mapping;
+    private final InventoryMapping inventoryMapping;
 
     public Product findProductById(Long id) {
         return inventoryRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
@@ -23,15 +23,15 @@ public class InventoryService {
 
     public List<AdminProductsResponse> getAllProductForAdmin(){
         List<Product> products = inventoryRepository.findAll();
-        return products.stream().map(mapping::mapToAdminResponse).toList();
+        return products.stream().map(inventoryMapping::mapToAdminResponse).toList();
     }
 
     public AdminProductsResponse addProduct(ProductRequest productRequest) {
-        Product product = mapping.mapToEntity(productRequest);
+        Product product = inventoryMapping.mapToEntity(productRequest);
 
         inventoryRepository.save(product);
 
-        return mapping.mapToAdminResponse(product);
+        return inventoryMapping.mapToAdminResponse(product);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class InventoryService {
             product.setStockThreshold(request.getStockThreshold());
 
         inventoryRepository.save(product);
-        return mapping.mapToAdminResponse(product);
+        return inventoryMapping.mapToAdminResponse(product);
     }
 
     public AdminProductsResponse deleteProduct(Long id) {
@@ -59,7 +59,7 @@ public class InventoryService {
         product.setActive(false);
         inventoryRepository.save(product);
 
-        return mapping.mapToAdminResponse(product);
+        return inventoryMapping.mapToAdminResponse(product);
     }
 
 }
