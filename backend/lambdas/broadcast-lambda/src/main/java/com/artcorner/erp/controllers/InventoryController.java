@@ -1,7 +1,8 @@
 package com.artcorner.erp.controllers;
 
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
-import com.artcorner.erp.dto.response.inventory.ProductRequest;
+import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
+import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.services.inventory.InventoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,12 @@ public class InventoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminProductsResponse> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.ok(inventoryService.deleteProduct(id));
+    }
+
+    @GetMapping("/products")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<List<CustomerProductResponse>>  getAllProductsForCustomer() {
+        return ResponseEntity.ok(inventoryService.getAllProductForCustomer());
     }
 
 }

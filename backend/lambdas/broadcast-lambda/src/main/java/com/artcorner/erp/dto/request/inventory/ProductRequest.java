@@ -1,4 +1,4 @@
-package com.artcorner.erp.dto.response.inventory;
+package com.artcorner.erp.dto.request.inventory;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;

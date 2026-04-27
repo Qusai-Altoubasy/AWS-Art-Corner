@@ -21,6 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<String> signup(@Valid @RequestBody RegisterUserRequest request) {
         userService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Sign up Successful");

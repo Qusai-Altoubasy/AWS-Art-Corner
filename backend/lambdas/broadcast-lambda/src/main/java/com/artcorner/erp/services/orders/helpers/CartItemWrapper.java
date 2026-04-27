@@ -1,0 +1,13 @@
+package com.artcorner.erp.services.orders.helpers;
+
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class CartItemWrapper {
+    private String customerId;
+    private String productName;
+    private String imageUrl;
+    private BigDecimal price;
+}

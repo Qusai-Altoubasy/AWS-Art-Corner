@@ -1,12 +1,12 @@
 package com.artcorner.erp.services.inventory;
 
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
-import com.artcorner.erp.dto.response.inventory.ProductRequest;
+import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.entities.inventory.Product;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InventoryMapping {
+public class InventoryMapper {
     public AdminProductsResponse mapToAdminResponse(Product product) {
         if (product == null) {
             return null;

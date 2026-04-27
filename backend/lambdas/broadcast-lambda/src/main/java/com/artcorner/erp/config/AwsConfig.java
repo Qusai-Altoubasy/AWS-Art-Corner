@@ -1,8 +1,12 @@
 package com.artcorner.erp.config;
 
+import com.artcorner.erp.entities.orders.CartItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -26,6 +30,21 @@ public class AwsConfig {
         return DynamoDbClient.builder()
                 .region(Region.of(appProperties.getAws().getRegion()))
                 .build();
+    }
+
+    @Bean
+    public DynamoDbEnhancedClient enhancedClient(DynamoDbClient dynamoDbClient) {
+        return DynamoDbEnhancedClient.builder()
+                .dynamoDbClient(dynamoDbClient)
+                .build();
+    }
+
+    @Bean
+    public DynamoDbTable<CartItem> cartTable(DynamoDbEnhancedClient enhancedClient) {
+        return enhancedClient.table(
+                appProperties.getAws().getDynamoTableName(),
+                TableSchema.fromBean(CartItem.class)
+        );
     }
 
     @Bean

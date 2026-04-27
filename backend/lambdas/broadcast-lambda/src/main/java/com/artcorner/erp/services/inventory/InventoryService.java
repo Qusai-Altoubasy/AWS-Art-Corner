@@ -1,7 +1,8 @@
 package com.artcorner.erp.services.inventory;
 
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
-import com.artcorner.erp.dto.response.inventory.ProductRequest;
+import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
+import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.exceptions.ProductNotFoundException;
 import com.artcorner.erp.repositories.inventory.InventoryRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
-    private final InventoryMapping inventoryMapping;
+    private final InventoryMapper inventoryMapper;
 
     public Product findProductById(Long id) {
         return inventoryRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
@@ -23,15 +24,15 @@ public class InventoryService {
 
     public List<AdminProductsResponse> getAllProductForAdmin(){
         List<Product> products = inventoryRepository.findAll();
-        return products.stream().map(inventoryMapping::mapToAdminResponse).toList();
+        return products.stream().map(inventoryMapper::mapToAdminResponse).toList();
     }
 
     public AdminProductsResponse addProduct(ProductRequest productRequest) {
-        Product product = inventoryMapping.mapToEntity(productRequest);
+        Product product = inventoryMapper.mapToEntity(productRequest);
 
         inventoryRepository.save(product);
 
-        return inventoryMapping.mapToAdminResponse(product);
+        return inventoryMapper.mapToAdminResponse(product);
     }
 
     @Transactional
@@ -50,7 +51,7 @@ public class InventoryService {
             product.setStockThreshold(request.getStockThreshold());
 
         inventoryRepository.save(product);
-        return inventoryMapping.mapToAdminResponse(product);
+        return inventoryMapper.mapToAdminResponse(product);
     }
 
     public AdminProductsResponse deleteProduct(Long id) {
@@ -59,7 +60,11 @@ public class InventoryService {
         product.setActive(false);
         inventoryRepository.save(product);
 
-        return inventoryMapping.mapToAdminResponse(product);
+        return inventoryMapper.mapToAdminResponse(product);
+    }
+
+    public List<CustomerProductResponse> getAllProductForCustomer(){
+        return inventoryRepository.findAllProductsForCustomer();
     }
 
 }

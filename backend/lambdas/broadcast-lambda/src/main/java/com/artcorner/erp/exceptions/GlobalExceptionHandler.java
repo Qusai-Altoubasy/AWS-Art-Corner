@@ -50,6 +50,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<Object> handleInsufficientStockException(
+            InsufficientStockException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "Insufficient_Stock",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidation(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -100,7 +112,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<Object> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<Object> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         return buildErrorResponse(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "METHOD_NOT_ALLOWED",
@@ -121,7 +134,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(org.springframework.dao.DataAccessException.class)
-    public ResponseEntity<Object> handleDatabaseException(org.springframework.dao.DataAccessException ex, HttpServletRequest request) {
+    public ResponseEntity<Object> handleDatabaseException(
+            org.springframework.dao.DataAccessException ex, HttpServletRequest request) {
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "DATABASE_ERROR",
@@ -142,7 +156,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<Object> handleGenericException(
+            Exception ex, HttpServletRequest request) {
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "INTERNAL_SERVER_ERROR",

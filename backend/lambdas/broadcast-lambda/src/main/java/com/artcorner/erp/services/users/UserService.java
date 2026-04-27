@@ -19,7 +19,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
-    private final UsersMapping usersMapping;
+    private final UsersMapper usersMapper;
 
     public User findUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
@@ -31,7 +31,7 @@ public class UserService {
             throw new IllegalArgumentException("User already registered");
         }
 
-        User user = usersMapping.mapToUserEntity(
+        User user = usersMapper.mapToUserEntity(
                 request,
                 securityUtils.getCurrentUserId(),
                 securityUtils.getCurrentUserEmail(),
@@ -54,7 +54,7 @@ public class UserService {
     public List<UserResponse> getAllUsersByRole(UserRole role){
         List<User> users = userRepository.findByRole(role);
 
-        return users.stream().map(usersMapping::mapToResponse).toList();
+        return users.stream().map(usersMapper::mapToResponse).toList();
     }
 
     public void activation(UUID id, boolean active) {
