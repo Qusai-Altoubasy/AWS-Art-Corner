@@ -1,8 +1,6 @@
 package com.artcorner.erp.config;
 
-import com.artcorner.erp.entities.users.User;
 import com.artcorner.erp.security.JwtClaimsFilter;
-import com.artcorner.erp.security.UserStatusFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +16,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final JwtClaimsFilter jwtClaimsFilter;
-    private final UserStatusFilter userStatusFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,11 +23,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api/users/signup").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtClaimsFilter,
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(userStatusFilter, JwtClaimsFilter.class)
                 .build();
     }
 }

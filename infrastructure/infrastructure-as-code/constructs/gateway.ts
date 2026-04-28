@@ -50,17 +50,17 @@ export class Gateway extends Construct {
 
         new cognito.CfnUserPoolGroup(this, 'AdminsGroup', {
             userPoolId: this.userPool.userPoolId,
-            groupName: 'Admin',
+            groupName: 'ADMIN',
         });
 
         new cognito.CfnUserPoolGroup(this, 'employeesGroup', {
             userPoolId: this.userPool.userPoolId,
-            groupName: 'employee'
+            groupName: 'EMPLOYEE'
         });
 
         new cognito.CfnUserPoolGroup(this, 'customersGroup', {
             userPoolId: this.userPool.userPoolId,
-            groupName: 'customer'
+            groupName: 'CUSTOMER'
         });
 
         this.userPoolClient = this.userPool.addClient('AppClient', {

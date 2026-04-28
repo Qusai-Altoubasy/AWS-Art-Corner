@@ -1,6 +1,6 @@
 ALTER TABLE users
     ADD CONSTRAINT check_user_role
-    CHECK (role IN ('Admin', 'employee', 'customer'));
+    CHECK (role IN ('ADMIN', 'EMPLOYEE', 'CUSTOMER'));
 
 ALTER TABLE orders
     ADD CONSTRAINT check_order_status

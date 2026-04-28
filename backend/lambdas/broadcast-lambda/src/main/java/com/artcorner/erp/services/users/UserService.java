@@ -43,11 +43,11 @@ public class UserService {
 
     private UserRole getCurrentUserRole() {
         String role = securityUtils.getCurrentUserRole();
-        if (role == null) return UserRole.customer;
+        if (role == null) return UserRole.CUSTOMER;
         return switch (role) {
-            case "Admin" -> UserRole.Admin;
-            case "employee" -> UserRole.employee;
-            default -> UserRole.customer;
+            case "ADMIN" -> UserRole.ADMIN;
+            case "EMPLOYEE" -> UserRole.EMPLOYEE;
+            default -> UserRole.CUSTOMER;
         };
     }
 
