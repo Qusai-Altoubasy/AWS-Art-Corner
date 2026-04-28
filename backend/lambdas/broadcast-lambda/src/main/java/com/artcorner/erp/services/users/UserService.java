@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public UserRole findUserRoleById(UUID id) {
+        return findUserById(id).getRole();
+    }
+
     @Transactional
     public void signUp(RegisterUserRequest request) {
         if (userRepository.existsById(securityUtils.getCurrentUserId())) {
