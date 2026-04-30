@@ -2,7 +2,7 @@ package com.artcorner.erp.controllers;
 
 import com.artcorner.erp.dto.request.cart.CartItemRequest;
 import com.artcorner.erp.dto.response.cart.CartItemResponse;
-import com.artcorner.erp.services.orders.CartService;
+import com.artcorner.erp.services.carts.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,6 +38,4 @@ public class CartController {
         cartService.removeFromCart(customerId, productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
 }

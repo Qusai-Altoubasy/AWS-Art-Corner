@@ -4,7 +4,9 @@ import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.entities.inventory.Product;
+import com.artcorner.erp.exceptions.InsufficientStockException;
 import com.artcorner.erp.exceptions.ProductNotFoundException;
+import com.artcorner.erp.mappers.InventoryMapper;
 import com.artcorner.erp.repositories.inventory.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,20 @@ public class InventoryService {
 
     public Product findProductById(Long id) {
         return inventoryRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @Transactional
+    public Product findProductByIdWithLook(Long id) {
+        return inventoryRepository.findWithLockById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @Transactional
+    public void reduceProductQuantity(Product product, Integer quantity) {
+        if (product.getStock() < quantity) {
+            throw new InsufficientStockException();
+        }
+
+        product.setStock(product.getStock() - quantity);
     }
 
     public List<AdminProductsResponse> getAllProductForAdmin(){

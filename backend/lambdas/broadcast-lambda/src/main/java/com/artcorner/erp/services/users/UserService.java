@@ -5,6 +5,7 @@ import com.artcorner.erp.dto.response.users.UserResponse;
 import com.artcorner.erp.entities.users.User;
 import com.artcorner.erp.entities.users.UserRole;
 import com.artcorner.erp.exceptions.UserNotFoundException;
+import com.artcorner.erp.mappers.UsersMapper;
 import com.artcorner.erp.repositories.users.UserRepository;
 import com.artcorner.erp.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;

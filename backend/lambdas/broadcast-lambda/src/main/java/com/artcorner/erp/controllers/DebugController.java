@@ -57,4 +57,24 @@ public class DebugController {
                 """
         );
     }
+
+    @GetMapping("/users")
+    public List<Map<String, Object>> getUsers() {
+        return jdbcTemplate.queryForList("SELECT * FROM users");
+    }
+
+    @GetMapping("/orders")
+    public List<Map<String, Object>> getOrders() {
+        return jdbcTemplate.queryForList("SELECT * FROM orders");
+    }
+
+    @GetMapping("/order_items")
+    public List<Map<String, Object>> getOrderItem() {
+        return jdbcTemplate.queryForList("SELECT * FROM order_items");
+    }
+
+    @GetMapping("/products")
+    public List<Map<String, Object>> getProducts() {
+        return jdbcTemplate.queryForList("SELECT * FROM products");
+    }
 }

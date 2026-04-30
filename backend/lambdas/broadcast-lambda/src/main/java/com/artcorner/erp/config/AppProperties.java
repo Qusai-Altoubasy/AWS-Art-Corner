@@ -35,7 +35,7 @@ public class AppProperties {
 
     @Data
     public static class Security{
-        private String API_GATEWAY_CONTEXT_ATTRIBUTE =
+        private String API_GATEWAY_REQUEST_CONTEXT =
                 "com.amazonaws.apigateway.request.context";
     }
 

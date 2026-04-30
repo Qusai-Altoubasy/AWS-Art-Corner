@@ -33,7 +33,7 @@ public class JwtClaimsFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        Object contextObj = request.getAttribute(appProperties.getSecurity().getAPI_GATEWAY_CONTEXT_ATTRIBUTE());
+        Object contextObj = request.getAttribute(appProperties.getSecurity().getAPI_GATEWAY_REQUEST_CONTEXT());
 
         if (contextObj instanceof AwsProxyRequestContext context) {
             ApiGatewayAuthorizerContext authorizer = context.getAuthorizer();

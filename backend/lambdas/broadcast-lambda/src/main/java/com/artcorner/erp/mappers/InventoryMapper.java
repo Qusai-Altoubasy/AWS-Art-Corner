@@ -1,4 +1,4 @@
-package com.artcorner.erp.services.inventory;
+package com.artcorner.erp.mappers;
 
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;

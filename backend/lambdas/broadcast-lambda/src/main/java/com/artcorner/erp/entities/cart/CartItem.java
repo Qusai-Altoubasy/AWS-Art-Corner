@@ -1,4 +1,4 @@
-package com.artcorner.erp.entities.orders;
+package com.artcorner.erp.entities.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

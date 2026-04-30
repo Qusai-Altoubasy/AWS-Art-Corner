@@ -1,8 +1,9 @@
-package com.artcorner.erp.services.orders.helpers;
+package com.artcorner.erp.mappers;
 
 import com.artcorner.erp.dto.request.cart.CartItemRequest;
 import com.artcorner.erp.dto.response.cart.CartItemResponse;
-import com.artcorner.erp.entities.orders.CartItem;
+import com.artcorner.erp.entities.cart.CartItem;
+import com.artcorner.erp.components.cart.CartItemWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

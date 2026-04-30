@@ -1,6 +1,6 @@
 package com.artcorner.erp.config;
 
-import com.artcorner.erp.entities.orders.CartItem;
+import com.artcorner.erp.entities.cart.CartItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

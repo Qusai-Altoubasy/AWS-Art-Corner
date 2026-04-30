@@ -1,5 +1,6 @@
 package com.artcorner.erp.exceptions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,17 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 HttpStatus.CONFLICT,
                 "Insufficient_Stock",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(CartEmptyException.class)
+    public ResponseEntity<Object> handleCartEmptyException(
+            CartEmptyException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "CART_EMPTY",
                 ex.getMessage(),
                 request.getRequestURI()
         );

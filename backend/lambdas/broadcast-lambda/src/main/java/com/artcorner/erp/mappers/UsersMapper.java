@@ -1,4 +1,4 @@
-package com.artcorner.erp.services.users;
+package com.artcorner.erp.mappers;
 
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
 import com.artcorner.erp.dto.response.users.UserResponse;
