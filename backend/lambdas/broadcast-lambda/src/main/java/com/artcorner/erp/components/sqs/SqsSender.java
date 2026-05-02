@@ -28,6 +28,7 @@ public class SqsSender {
             SendMessageRequest sendMessageRequest = SendMessageRequest.builder()
                     .queueUrl(queueUrl)
                     .messageBody(body)
+                    .messageGroupId(String.valueOf(orderPlacedEvent.getOrderId()))
                     .messageAttributes(Map.of(
                             "eventType", MessageAttributeValue.builder()
                                     .dataType("String")
