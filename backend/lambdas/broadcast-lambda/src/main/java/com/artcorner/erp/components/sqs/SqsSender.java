@@ -4,6 +4,7 @@ import com.artcorner.erp.config.AppProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
@@ -11,6 +12,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SqsSender {
@@ -37,8 +39,10 @@ public class SqsSender {
             sqsClient.sendMessage(sendMessageRequest);
 
         }catch (JsonProcessingException e) {
+            log.error("JSON serialization failed for orderId={}", orderPlacedEvent.getOrderId(), e);
             throw new RuntimeException("Failed to convert message body to JSON", e);
         }catch (Exception e){
+            log.error("Failed to send message to SQS. orderId={}", orderPlacedEvent.getOrderId(), e);
             throw new RuntimeException("Failed to send order to SQS", e);
         }
     }
