@@ -1,5 +1,6 @@
 package com.artcorner.erp.mappers;
 
+import com.artcorner.erp.components.sqs.InventoryStockAlertEvent;
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.entities.inventory.Product;
@@ -8,10 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InventoryMapper {
     public AdminProductsResponse mapToAdminResponse(Product product) {
-        if (product == null) {
-            return null;
-        }
-
         AdminProductsResponse response = new AdminProductsResponse();
         response.setId(product.getId());
         response.setName(product.getName());
@@ -24,21 +21,25 @@ public class InventoryMapper {
         return response;
     }
 
-    public Product mapToEntity(ProductRequest response) {
-        if (response == null) {
-            return null;
-        }
-
+    public Product mapToEntity(ProductRequest request) {
         Product product = new Product();
 
-        product.setName(response.getName());
-        product.setPrice(response.getPrice());
-        product.setCost(response.getCost());
-        product.setStock(response.getStock());
-        product.setStockThreshold(response.getStockThreshold());
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setCost(request.getCost());
+        product.setStock(request.getStock());
+        product.setStockThreshold(request.getStockThreshold());
 
         product.setActive(true);
 
         return product;
+    }
+
+    public InventoryStockAlertEvent mapToInventoryStockAlertEvent(Product product) {
+        return InventoryStockAlertEvent.builder()
+                .productId(product.getId())
+                .productName(product.getName())
+                .quantity(product.getStock())
+                .build();
     }
 }

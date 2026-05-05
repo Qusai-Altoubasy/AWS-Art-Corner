@@ -29,4 +29,11 @@ public class SecurityConfig {
                         org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    @Bean
+    public org.springframework.security.authentication.AuthenticationManager authenticationManager() {
+        return authentication -> {
+            throw new IllegalStateException("Authentication is handled by AWS Cognito/API Gateway");
+        };
+    }
 }

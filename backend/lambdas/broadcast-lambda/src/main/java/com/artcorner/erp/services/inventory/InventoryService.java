@@ -1,5 +1,7 @@
 package com.artcorner.erp.services.inventory;
 
+import com.artcorner.erp.components.sqs.InventoryStockAlertEvent;
+import com.artcorner.erp.components.sqs.SqsSender;
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
@@ -21,6 +23,8 @@ import java.util.List;
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
+    private static final int STOCK_ALERT = 1000;
+    private final SqsSender sqsSender;
 
     public Product findProductById(Long id) {
         log.debug("Fetching product. productId={}", id);
@@ -46,8 +50,9 @@ public class InventoryService {
                 product.getId(),
                 quantity,
                 product.getStock());
+        int newStock = product.getStock() - quantity;
 
-        if (product.getStock() < quantity) {
+        if (newStock < 0) {
             log.error("Insufficient stock. productId={}, requested={}, available={}",
                     product.getId(),
                     quantity,
@@ -56,10 +61,15 @@ public class InventoryService {
             throw new InsufficientStockException();
         }
 
-        product.setStock(product.getStock() - quantity);
+        product.setStock(newStock);
         log.info("Stock reduced successfully. productId={}, newStock={}",
                 product.getId(),
                 product.getStock());
+
+        if (newStock < STOCK_ALERT){
+            InventoryStockAlertEvent event = inventoryMapper.mapToInventoryStockAlertEvent(product);
+            sqsSender.sendMessageToQueue(event, "StockAlert", String.valueOf(newStock));
+        }
     }
 
     @Transactional
