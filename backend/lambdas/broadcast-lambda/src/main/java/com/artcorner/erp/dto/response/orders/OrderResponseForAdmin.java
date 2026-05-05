@@ -11,22 +11,34 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class OrderResponse {
+public class OrderResponseForAdmin {
     private Long orderId;
+    private OrderStatus status;
+
     private UUID customerId;
-    private OrderStatus orderStatus;
+    private String customerName;
+    private String customerEmail;
+
+    private UUID employeeId;
+    private String employeeName;
+    private String employeeEmail;
+
     private BigDecimal totalAmount;
+    private BigDecimal totalCost;
+
     private LocalDateTime createdAt;
-    private List<OrderItemResponse> orderItemResponses;
+    private LocalDateTime updatedAt;
+
+    private List<OrderItemForAdmin> items;
 
     @Data
     @Builder
-    public static class OrderItemResponse {
-        private Long itemId;
+    public static class OrderItemForAdmin {
         private Long productId;
         private String productName;
         private int quantity;
-        private BigDecimal price;
-    }
 
+        private BigDecimal price;
+        private BigDecimal cost;
+    }
 }

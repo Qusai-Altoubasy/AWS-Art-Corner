@@ -3,7 +3,7 @@ package com.artcorner.erp.components.cart;
 import com.artcorner.erp.dto.request.cart.CartItemRequest;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.entities.cart.CartItem;
-import com.artcorner.erp.exceptions.InsufficientStockException;
+import com.artcorner.erp.exceptions.inventory.InsufficientStockException;
 import com.artcorner.erp.mappers.CartItemMapper;
 import com.artcorner.erp.services.inventory.InventoryService;
 import lombok.RequiredArgsConstructor;

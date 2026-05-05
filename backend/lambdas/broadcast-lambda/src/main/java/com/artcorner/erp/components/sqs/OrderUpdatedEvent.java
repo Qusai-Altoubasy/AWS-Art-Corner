@@ -6,12 +6,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
-public class OrderPlacedEvent {
+public class OrderUpdatedEvent {
     private Long orderId;
     private OrderStatus orderStatus;
 
@@ -21,18 +20,5 @@ public class OrderPlacedEvent {
     private String customerEmail;
 
     private BigDecimal totalAmount;
-    private LocalDateTime createdAt;
-
-    private List<MessageOrderItem>  messageOrderItems;
-
-    @Data
-    @Builder
-    public static class MessageOrderItem {
-        private Long itemId;
-        private Long productId;
-        private String productName;
-        private int quantity;
-        private BigDecimal price;
-
-    }
+    private LocalDateTime updatedAt;
 }

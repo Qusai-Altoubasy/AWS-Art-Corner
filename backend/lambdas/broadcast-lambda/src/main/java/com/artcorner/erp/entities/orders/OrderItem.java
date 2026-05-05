@@ -47,6 +47,7 @@ public class OrderItem {
     @DecimalMin(value = "0.0")
     private BigDecimal cost;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean isActive = true;
 }

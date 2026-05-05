@@ -1,7 +1,7 @@
 package com.artcorner.erp.repositories.cart;
 
 import com.artcorner.erp.entities.cart.CartItem;
-import com.artcorner.erp.exceptions.CartEmptyException;
+import com.artcorner.erp.exceptions.cart.CartEmptyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;

@@ -4,8 +4,8 @@ import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.entities.inventory.Product;
-import com.artcorner.erp.exceptions.InsufficientStockException;
-import com.artcorner.erp.exceptions.ProductNotFoundException;
+import com.artcorner.erp.exceptions.inventory.InsufficientStockException;
+import com.artcorner.erp.exceptions.inventory.ProductNotFoundException;
 import com.artcorner.erp.mappers.InventoryMapper;
 import com.artcorner.erp.repositories.inventory.InventoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,21 @@ public class InventoryService {
         }
 
         product.setStock(product.getStock() - quantity);
-        log.info("Stock updated successfully. productId={}, newStock={}",
+        log.info("Stock reduced successfully. productId={}, newStock={}",
+                product.getId(),
+                product.getStock());
+    }
+
+    @Transactional
+    public void increaseProductQuantity(Product product, int quantity) {
+        log.info("Increasing product stock. productId={}, requested={}, currentStock={}",
+                product.getId(),
+                quantity,
+                product.getStock());
+
+        inventoryRepository.incrementStock(product.getId(), quantity);
+
+        log.info("Stock increased successfully. productId={}, newStock={}",
                 product.getId(),
                 product.getStock());
     }

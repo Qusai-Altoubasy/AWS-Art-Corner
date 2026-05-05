@@ -1,4 +1,4 @@
-package com.artcorner.erp.exceptions;
+package com.artcorner.erp.exceptions.cart;
 
 public class CartEmptyException extends RuntimeException {
     public CartEmptyException() {

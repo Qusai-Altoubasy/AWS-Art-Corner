@@ -4,8 +4,11 @@ import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.entities.cart.CartItem;
 import com.artcorner.erp.entities.orders.Order;
 import com.artcorner.erp.entities.orders.OrderItem;
+import com.artcorner.erp.entities.orders.OrderStatus;
 import com.artcorner.erp.entities.users.User;
-import com.artcorner.erp.exceptions.InsufficientStockException;
+import com.artcorner.erp.exceptions.inventory.InsufficientStockException;
+import com.artcorner.erp.exceptions.orders.IllegalOrderStatusException;
+import com.artcorner.erp.exceptions.orders.OrderStatusAlreadySetException;
 import com.artcorner.erp.services.carts.CartService;
 import com.artcorner.erp.services.inventory.InventoryService;
 import com.artcorner.erp.services.users.UserService;
@@ -25,13 +28,13 @@ public class OrderOrchestrator {
     private final UserService userService;
     private static final int SCALE = 3;
 
-    public Order prepareOrder(UUID customerId) {
+    public Order preparePlacingOrder(UUID customerId) {
         User customer = userService.findUserById(customerId);
 
         List<CartItem> items = cartService.getAllItems(customerId.toString());
 
         Order order = new Order();
-        List<OrderItem> orderItems = prepareOrderItems(order, items);
+        List<OrderItem> orderItems = preparePlacingOrderItems(order, items);
 
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal totalCost = BigDecimal.ZERO;
@@ -48,12 +51,12 @@ public class OrderOrchestrator {
         return order;
     }
 
-    private List<OrderItem> prepareOrderItems(Order order, List<CartItem> cartItems) {
+    private List<OrderItem> preparePlacingOrderItems(Order order, List<CartItem> cartItems) {
          return cartItems.stream().map(cartItem ->{
             Product product = inventoryService.findProductByIdWithLook(Long.valueOf(cartItem.getProductId()));
 
             int quantity = cartItem.getQuantity();
-            validationQuantity(product, quantity);
+            validationPlacingQuantity(product, quantity);
             BigDecimal price = calculateItemPrice(product, quantity);
             BigDecimal cost = calculateItemCost(product, quantity);
 
@@ -70,7 +73,7 @@ public class OrderOrchestrator {
         }).toList();
     }
 
-    private void validationQuantity(Product product, int quantity) {
+    private void validationPlacingQuantity(Product product, int quantity) {
         if (product.getStock() < quantity) {
             throw new InsufficientStockException();
         }
@@ -92,4 +95,22 @@ public class OrderOrchestrator {
         cartService.deleteAllItems(customerId.toString());
     }
 
+    public void increaseProductsQuantities(List <OrderItem> items) {
+        items.forEach(item ->
+                inventoryService.increaseProductQuantity(item.getProduct(), item.getQuantity()));
+    }
+
+    public void validateNewOrderStatus(OrderStatus currentStatus, OrderStatus newStatus) {
+        if (currentStatus == newStatus) {
+            throw new OrderStatusAlreadySetException();
+        }
+
+        if (!currentStatus.canTransitionTo(newStatus)) {
+            throw new IllegalOrderStatusException(currentStatus, newStatus);
+        }
+    }
+
+    public User findEmployeeById(UUID employeeId){
+        return userService.findUserById(employeeId);
+    }
 }

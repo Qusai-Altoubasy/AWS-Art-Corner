@@ -1,4 +1,4 @@
-package com.artcorner.erp.exceptions;
+package com.artcorner.erp.exceptions.inventory;
 
 public class InsufficientStockException extends RuntimeException{
     public InsufficientStockException() {

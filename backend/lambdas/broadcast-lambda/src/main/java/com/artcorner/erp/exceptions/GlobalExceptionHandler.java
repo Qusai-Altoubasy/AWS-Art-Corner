@@ -1,6 +1,14 @@
 package com.artcorner.erp.exceptions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.artcorner.erp.exceptions.cart.CartEmptyException;
+import com.artcorner.erp.exceptions.inventory.InsufficientStockException;
+import com.artcorner.erp.exceptions.inventory.InvalidRequestException;
+import com.artcorner.erp.exceptions.inventory.ProductNotFoundException;
+import com.artcorner.erp.exceptions.orders.IllegalOrderStatusException;
+import com.artcorner.erp.exceptions.orders.OrderNotFoundException;
+import com.artcorner.erp.exceptions.orders.OrderNotPendingException;
+import com.artcorner.erp.exceptions.orders.OrderStatusAlreadySetException;
+import com.artcorner.erp.exceptions.users.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -68,6 +76,50 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "CART_EMPTY",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Object> handleOrderNotFoundException(
+            OrderNotFoundException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "ORDER_NOT_FOUND",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(OrderNotPendingException.class)
+    public ResponseEntity<Object> handleOrderNotPendingException(
+            OrderNotPendingException ex, HttpServletRequest request){
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "ORDER_NOT_PENDING",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(OrderStatusAlreadySetException.class)
+    public ResponseEntity<Object> handleOrderStatusAlreadySetException(
+            OrderStatusAlreadySetException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "ORDER_STATUS_ALREADY_SET",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(IllegalOrderStatusException.class)
+    public ResponseEntity<Object> handleIllegalStateException(
+            IllegalOrderStatusException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "ILLEGAL_STATE",
                 ex.getMessage(),
                 request.getRequestURI()
         );

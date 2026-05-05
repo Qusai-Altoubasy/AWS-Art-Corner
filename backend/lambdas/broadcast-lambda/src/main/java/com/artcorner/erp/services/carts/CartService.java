@@ -4,7 +4,7 @@ import com.artcorner.erp.components.shared.UserAccessHelper;
 import com.artcorner.erp.dto.request.cart.CartItemRequest;
 import com.artcorner.erp.dto.response.cart.CartItemResponse;
 import com.artcorner.erp.entities.cart.CartItem;
-import com.artcorner.erp.exceptions.CartEmptyException;
+import com.artcorner.erp.exceptions.cart.CartEmptyException;
 import com.artcorner.erp.repositories.cart.CartRepository;
 import com.artcorner.erp.mappers.CartItemMapper;
 import com.artcorner.erp.components.cart.CartOrchestrator;

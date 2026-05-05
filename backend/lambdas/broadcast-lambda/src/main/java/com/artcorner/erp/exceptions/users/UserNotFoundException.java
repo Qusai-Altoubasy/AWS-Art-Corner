@@ -1,4 +1,4 @@
-package com.artcorner.erp.exceptions;
+package com.artcorner.erp.exceptions.users;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.artcorner.erp.exceptions;
+package com.artcorner.erp.exceptions.inventory;
 
 public class InvalidRequestException extends RuntimeException {
     public InvalidRequestException(String message) {
