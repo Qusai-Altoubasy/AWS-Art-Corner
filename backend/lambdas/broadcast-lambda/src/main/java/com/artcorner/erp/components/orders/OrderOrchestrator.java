@@ -82,13 +82,13 @@ public class OrderOrchestrator {
     private BigDecimal calculateItemPrice(Product product, int quantity) {
         return product.getPrice()
                 .multiply(BigDecimal.valueOf(quantity))
-                .setScale(SCALE, RoundingMode.HALF_EVEN);
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal calculateItemCost(Product product, int quantity) {
         return product.getCost()
                 .multiply(BigDecimal.valueOf(quantity))
-                .setScale(SCALE, RoundingMode.HALF_EVEN);
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public void deleteItemsFromCart(UUID customerId) {
