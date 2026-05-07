@@ -79,8 +79,10 @@ export class Compute extends Construct {
             memorySize: appConfig.compute.notificationLambda.memorySize,
             timeout: cdk.Duration.seconds(appConfig.compute.notificationLambda.timeout),
             environment: {
+                REGION: appConfig.awsEnv.region as string,
                 EMPLOYEES_TOPIC_ARN: props.employeesTopic.topicArn,
                 ADMINS_TOPIC_ARN: props.adminsTopic.topicArn,
+                FROM_EMAIL: appConfig.messaging.ses.fromEmail
             },
         });
 
@@ -130,8 +132,6 @@ export class Compute extends Construct {
 
         props.shoppingCartTable.grantReadWriteData(this.broadCastFunction);
         props.orderQueue.grantSendMessages(this.broadCastFunction);
-        props.employeesTopic.grantPublish(this.broadCastFunction);
-        props.adminsTopic.grantPublish(this.broadCastFunction);
         props.productsImagesBucket.grantPut(this.broadCastFunction);
 
         props.orderQueue.grantConsumeMessages(this.notificationLambda);
@@ -139,7 +139,10 @@ export class Compute extends Construct {
         props.adminsTopic.grantPublish(this.notificationLambda);
         this.notificationLambda.addToRolePolicy(new iam.PolicyStatement({
             actions: ['ses:SendEmail', 'ses:SendRawEmail'],
-            resources: [`arn:aws:ses:${appConfig.awsEnv.region}:${appConfig.awsEnv.account}:identity/*`],
+            resources: [
+                `arn:aws:ses:${appConfig.awsEnv.region}:${appConfig.awsEnv.account}:identity/*`,
+                `arn:aws:ses:${appConfig.awsEnv.region}:${appConfig.awsEnv.account}:configuration-set/my-first-configuration-set`
+            ],
             effect: iam.Effect.ALLOW,
         }));
      

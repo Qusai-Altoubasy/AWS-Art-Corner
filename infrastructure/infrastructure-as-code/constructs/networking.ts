@@ -98,12 +98,14 @@ export class Networking extends Construct {
       open: false,
     });
 
-    this.vpc.addInterfaceEndpoint('SESEndpoint', {
-      service: ec2.InterfaceVpcEndpointAwsService.EMAIL_SMTP,
+    this.vpc.addInterfaceEndpoint('SESApiEndpoint', {
+      service: {
+        name: `com.amazonaws.${appConfig.awsEnv.region}.email`,
+        port: 443,
+      },
       subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
       securityGroups: [endpointSg],
       privateDnsEnabled: true,
-      open: false,
     });
 
     this.vpc.addInterfaceEndpoint('ECRApiEndpoint', {

@@ -33,9 +33,11 @@ public class CartRepository {
     }
 
     public Optional<List<CartItem>> findByCustomerId(String customerId) {
-        return Optional.of(cartTable.query(
+        List<CartItem> items = cartTable.query(
                 QueryConditional.keyEqualTo(k -> k.partitionValue(customerId))
-        ).items().stream().toList());
+        ).items().stream().toList();
+
+        return items.isEmpty() ? Optional.empty() : Optional.of(items);
     }
 
     public CartItem findByCustomerIdAndProductId(String customerId, String productId) {

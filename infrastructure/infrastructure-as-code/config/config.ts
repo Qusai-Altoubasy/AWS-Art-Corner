@@ -101,19 +101,19 @@ export const MESSAGING= {
   employeesTopic:{
     topicName: `${PROJECT.prefix}-employeesTopic`,
     emails: [
-      'employee1@gmail.com',
-      'employee2@gmail.com',
-      'employee3@gmail.com'
+      'osama123hyasat@gmail.com'
     ]
     },
 
   adminsTopic:{
     topicName: `${PROJECT.prefix}-adminsTopic`,
     emails: [
-      'admin1@gmail.com',
-      'admin2@gmail.com',
-      'admin3@gmail.com'
+      'osama123hyasat@gmail.com'
     ]
+  },
+
+  ses: {
+    fromEmail : 'qaltwbasy@gmail.com'
   },
 
   events: {
