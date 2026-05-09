@@ -1,5 +1,8 @@
 package com.artcorner.erp.components.orders;
 
+import com.artcorner.erp.components.calculators.CostCalculator;
+import com.artcorner.erp.components.calculators.PriceCalculator;
+import com.artcorner.erp.components.validators.QuantityValidator;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.entities.cart.CartItem;
 import com.artcorner.erp.entities.orders.Order;
@@ -16,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +28,9 @@ public class OrderOrchestrator {
     private final CartService cartService;
     private final InventoryService inventoryService;
     private final UserService userService;
-    private static final int SCALE = 3;
+    private final PriceCalculator  priceCalculator;
+    private final CostCalculator  costCalculator;
+    private final QuantityValidator quantityValidator;
 
     public Order preparePlacingOrder(UUID customerId) {
         User customer = userService.findUserById(customerId);
@@ -56,9 +60,9 @@ public class OrderOrchestrator {
             Product product = inventoryService.findProductByIdWithLook(Long.valueOf(cartItem.getProductId()));
 
             int quantity = cartItem.getQuantity();
-            validationPlacingQuantity(product, quantity);
-            BigDecimal price = calculateItemPrice(product, quantity);
-            BigDecimal cost = calculateItemCost(product, quantity);
+            quantityValidator.validate(product, quantity);
+            BigDecimal price = priceCalculator.calculateItemPrice(product, quantity);
+            BigDecimal cost = costCalculator.calculateItemCost(product, quantity);
 
             inventoryService.reduceProductQuantity(product, quantity);
 
@@ -71,24 +75,6 @@ public class OrderOrchestrator {
                     .build();
 
         }).toList();
-    }
-
-    private void validationPlacingQuantity(Product product, int quantity) {
-        if (product.getStock() < quantity) {
-            throw new InsufficientStockException();
-        }
-    }
-
-    private BigDecimal calculateItemPrice(Product product, int quantity) {
-        return product.getPrice()
-                .multiply(BigDecimal.valueOf(quantity))
-                .setScale(SCALE, RoundingMode.HALF_UP);
-    }
-
-    private BigDecimal calculateItemCost(Product product, int quantity) {
-        return product.getCost()
-                .multiply(BigDecimal.valueOf(quantity))
-                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public void deleteItemsFromCart(UUID customerId) {

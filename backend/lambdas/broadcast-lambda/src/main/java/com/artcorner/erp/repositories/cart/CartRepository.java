@@ -16,22 +16,6 @@ import java.util.Optional;
 public class CartRepository {
     private final DynamoDbTable<CartItem> cartTable;
 
-    public void saveItem(CartItem item) {
-        cartTable.putItem(item);
-    }
-
-    public void deleteItem(String customerId, String productId) {
-        Key key = Key.builder().partitionValue(customerId).sortValue(productId).build();
-        cartTable.deleteItem(key);
-    }
-
-    public void deleteAllItems(String customerId) {
-        List<CartItem> cartItems = findByCustomerId(customerId)
-                .orElseThrow(CartEmptyException::new);
-
-        cartItems.forEach(cartItem -> deleteItem(customerId, cartItem.getProductId()));
-    }
-
     public Optional<List<CartItem>> findByCustomerId(String customerId) {
         List<CartItem> items = cartTable.query(
                 QueryConditional.keyEqualTo(k -> k.partitionValue(customerId))
@@ -47,5 +31,21 @@ public class CartRepository {
                 .build();
 
         return cartTable.getItem(key);
+    }
+
+    public void saveItem(CartItem item) {
+        cartTable.putItem(item);
+    }
+
+    public void deleteItem(String customerId, String productId) {
+        Key key = Key.builder().partitionValue(customerId).sortValue(productId).build();
+        cartTable.deleteItem(key);
+    }
+
+    public void deleteAllItems(String customerId) {
+        List<CartItem> cartItems = findByCustomerId(customerId)
+                .orElseThrow(CartEmptyException::new);
+
+        cartItems.forEach(cartItem -> deleteItem(customerId, cartItem.getProductId()));
     }
 }

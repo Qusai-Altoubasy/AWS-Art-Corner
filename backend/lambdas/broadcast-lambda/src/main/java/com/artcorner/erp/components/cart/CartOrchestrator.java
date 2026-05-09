@@ -1,5 +1,7 @@
 package com.artcorner.erp.components.cart;
 
+import com.artcorner.erp.components.calculators.PriceCalculator;
+import com.artcorner.erp.components.validators.QuantityValidator;
 import com.artcorner.erp.dto.request.cart.CartItemRequest;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.entities.cart.CartItem;
@@ -10,21 +12,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Component
 @RequiredArgsConstructor
 public class CartOrchestrator {
     private final InventoryService inventoryService;
     private final CartItemMapper cartItemMapper;
-    private static final int SCALE = 3;
+    private final PriceCalculator  priceCalculator;
+    private final QuantityValidator quantityValidator;
 
     public CartItem prepareCartItem(String customerId, CartItemRequest request){
         Product product = inventoryService.findProductById(request.getProductId());
 
-        validationQuantity(product, request.getQuantity());
+        quantityValidator.validate(product, request.getQuantity());
 
-        BigDecimal price = calculatePrice(product.getPrice(), request.getQuantity());
+        BigDecimal price = priceCalculator.calculateItemPrice(product, request.getQuantity());
 
         CartItemWrapper wrapper = new CartItemWrapper();
         wrapper.setCustomerId(customerId);
@@ -33,17 +35,5 @@ public class CartOrchestrator {
         wrapper.setPrice(price);
 
         return cartItemMapper.mapToEntity(wrapper, request);
-    }
-
-    private void validationQuantity(Product product, int quantity) {
-        if (product.getStock() < quantity) {
-            throw new InsufficientStockException();
-        }
-    }
-
-    private BigDecimal calculatePrice(BigDecimal productPrice, int quantity) {
-        return productPrice
-                .multiply(BigDecimal.valueOf(quantity))
-                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 }
