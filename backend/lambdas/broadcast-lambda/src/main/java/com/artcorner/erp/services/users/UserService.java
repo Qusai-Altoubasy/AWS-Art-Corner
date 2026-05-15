@@ -76,6 +76,14 @@ public class UserService {
         );
     }
 
+    public UserResponse login() {
+        UUID id = securityUtils.getCurrentUserId();
+        log.info("User fetching. userId={}", id);
+
+        User user = findUserById(id);
+        return usersMapper.mapToResponse(user);
+    }
+
     private UserRole getCurrentUserRole() {
         String role = securityUtils.getCurrentUserRole();
         if (role == null) {
@@ -108,5 +116,4 @@ public class UserService {
 
         log.info("User activation updated. userId={}, active={}", id, active);
     }
-
 }

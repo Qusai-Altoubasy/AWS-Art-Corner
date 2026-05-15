@@ -27,6 +27,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Sign up Successful");
     }
 
+    @GetMapping("/login")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<UserResponse> login() {
+        return ResponseEntity.ok(userService.login());
+    }
+
     @GetMapping("/{role}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsersByRole(@PathVariable UserRole role) {
@@ -39,4 +45,5 @@ public class UserController {
         userService.activation(id, action);
         return ResponseEntity.ok("Updated activation successfully");
     }
+
 }

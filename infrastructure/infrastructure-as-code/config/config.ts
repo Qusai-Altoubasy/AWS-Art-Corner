@@ -197,6 +197,10 @@ export const GATEWAY = {
 } as const;
 
 export const EDGE = {
+  domainName: ENV === 'prod' ? 'artcorner.customer.com' : 'dev.artcorner.customer.com',
+  frontendAssetPath: '../../frontend/Customers/dist',
+  customerFrontendBucketName: `${PROJECT.prefix}-customer-frontend-site`,
+
   waf: {
     name: `${PROJECT.prefix}-WebACL`,
     metricName: `${PROJECT.prefix}-waf`,
