@@ -6,6 +6,8 @@ app:
     orderQueueUrl: ${APP_AWS_ORDER_QUEUE_URL}
     productsImagesBucketName: ${APP_AWS_PRODUCTS_IMAGES_BUCKET_NAME}
     env: ${APP_AWS_ENV}
+    cognitoUserPoolId: ${APP_AWS_COGNITO_USER_POOL_ID}
+    cognitoClientId: ${APP_AWS_COGNITO_CLIENT_ID}
 
 spring:
   flyway:

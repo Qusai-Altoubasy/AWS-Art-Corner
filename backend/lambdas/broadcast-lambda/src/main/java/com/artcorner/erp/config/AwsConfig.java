@@ -8,6 +8,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
@@ -57,6 +58,13 @@ public class AwsConfig {
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
+                .region(Region.of(appProperties.getAws().getRegion()))
+                .build();
+    }
+
+    @Bean
+    public CognitoIdentityProviderClient cognitoClient() {
+        return CognitoIdentityProviderClient.builder()
                 .region(Region.of(appProperties.getAws().getRegion()))
                 .build();
     }

@@ -179,6 +179,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cognitoidentityprovider</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- ─────────────────── Build ─────────────────── -->

@@ -2,6 +2,7 @@ package com.artcorner.erp.mappers;
 
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
 import com.artcorner.erp.dto.response.users.UserResponse;
+import com.artcorner.erp.dto.response.users.UserSignupResponse;
 import com.artcorner.erp.entities.users.Address;
 import com.artcorner.erp.entities.users.User;
 import com.artcorner.erp.entities.users.UserRole;
@@ -12,19 +13,17 @@ import java.util.UUID;
 @Component
 public class UsersMapper {
 
-    public User mapToUserEntity(RegisterUserRequest request, UUID userId, String email, UserRole role) {
+    public User mapToUserEntity(RegisterUserRequest request, UUID userId) {
         if (request == null) {
             return null;
         }
 
         User user = new User();
-
         user.setId(userId);
-        user.setEmail(email);
-        user.setRole(role);
-
         user.setName(request.getName());
+        user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
+        user.setRole(request.getRole());
         user.setActive(true);
 
         if (request.getAddress() != null) {
@@ -38,6 +37,17 @@ public class UsersMapper {
         }
 
         return user;
+    }
+
+    public UserSignupResponse mapToUserSignupResponse(String email) {
+        if (email == null) {
+            return null;
+        }
+
+        return UserSignupResponse.builder()
+                .email(email)
+                .message("User registered successfully. A temporary password has been sent to the registered email.")
+                .build();
     }
 
     public UserResponse mapToResponse(User user) {

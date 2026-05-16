@@ -10,7 +10,7 @@ interface CartCardProps {
 }
 
 export const CartCard = ({ item }: CartCardProps) => {
-  const { removeItem, addItem: addToCart, loading } = useCartStore();
+  const { removeItem, addItem, loading } = useCartStore();
 
   const isRemoving = loading.removeItem[item.productId];
   const isUpdating = loading.addItem[item.productId];
@@ -28,22 +28,18 @@ export const CartCard = ({ item }: CartCardProps) => {
     }
   }, [removeItem, item.productId, item.productName]);
 
-  const handleIncrement = () => setQuantity((q) => q + 1);
-  const handleDecrement = () => setQuantity((q) => Math.max(1, q - 1));
+  const handleIncrement = () => setQuantity((q) => q + 50);
 
   const handleUpdate = useCallback(async () => {
     try {
-      const response = await addToCart(
-        item.productId,
-        quantity - item.quantity,
-      );
+      const response = await addItem(item.productId, quantity - item.quantity);
       toast.success(response);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update item",
       );
     }
-  }, [addToCart, item.productId, quantity]);
+  }, [addItem, item.productId, quantity]);
 
   const hasChanges = quantity !== item.quantity;
   return (
@@ -53,8 +49,7 @@ export const CartCard = ({ item }: CartCardProps) => {
       price={item.price}
       quantity={quantity}
       onIncrement={handleIncrement}
-      onDecrement={handleDecrement}
-      disableDecrement={quantity <= 1 || isRemoving}
+      disableDecrement={quantity <= 50 || isRemoving}
       disableIncrement={isRemoving}
       actionLabel="Remove"
       actionIcon={<Trash2 size={18} />}

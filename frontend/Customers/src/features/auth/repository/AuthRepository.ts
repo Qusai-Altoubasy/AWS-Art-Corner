@@ -17,8 +17,13 @@ class AuthRepository {
   }
 
   async getMe(): Promise<User> {
-    const response = await api.get("/api/users/login");
-    return response.data;
+    try {
+      const response = await api.get("/api/users/login");
+      return response.data;
+    } catch (error) {
+      await signOut();
+      throw error;
+    }
   }
 
   async logout(): Promise<void> {

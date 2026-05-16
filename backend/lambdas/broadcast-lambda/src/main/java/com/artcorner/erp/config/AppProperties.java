@@ -31,6 +31,8 @@ public class AppProperties {
         @NotBlank private String orderQueueUrl;
         @NotBlank private String productsImagesBucketName;
         @NotBlank private String env;
+        @NotBlank private String cognitoUserPoolId;
+        @NotBlank private String cognitoClientId;
     }
 
     @Data

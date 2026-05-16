@@ -47,6 +47,8 @@ export class ArtCornerStack extends cdk.Stack {
       broadCastFunction: compute.broadCastFunction
     });
 
+    compute.addIamRoleToBroadCastFunction(gateway.userPool, gateway.userPoolClient);
+
     const edge = new Edge(this, 'EdgeLayer', {
       api: gateway.api,
       // wafArn: props.wafArn,

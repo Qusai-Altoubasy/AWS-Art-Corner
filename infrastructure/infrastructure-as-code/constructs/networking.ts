@@ -123,5 +123,13 @@ export class Networking extends Construct {
       privateDnsEnabled: true,
       open: false,
     });
+
+    this.vpc.addInterfaceEndpoint('CognitoIdpEndpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.COGNITO_IDP,
+      subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
+      securityGroups: [endpointSg],
+      privateDnsEnabled: true,
+      open: false,
+    });
   }
 }

@@ -26,6 +26,8 @@ export const OrderStatusTabs = ({
   return (
     <div
       className="
+        w-max
+        mx-auto
         relative
         overflow-x-auto
         rounded-3xl
@@ -34,9 +36,11 @@ export const OrderStatusTabs = ({
         bg-white/5
         p-2
         backdrop-blur-xl
+        flex
+        justify-center
       "
     >
-      <div className="flex min-w-max gap-1 sm:min-w-0 sm:flex-wrap">
+      <div className="flex min-w-max gap-1 justify-center sm:min-w-0 sm:flex-wrap">
         {ORDER_STATUSES.map((status) => {
           const isActive = status === activeStatus;
           const meta = ORDER_STATUS_STYLES[status];

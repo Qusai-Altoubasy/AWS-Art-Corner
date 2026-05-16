@@ -7,8 +7,8 @@ import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
 export class Gateway extends Construct {
-    private readonly userPool: cognito.UserPool;
-    private readonly userPoolClient: cognito.UserPoolClient;
+    public readonly userPool: cognito.UserPool;
+    public readonly userPoolClient: cognito.UserPoolClient;
     public readonly api: apigateway.RestApi;
 
     constructor(scope: Construct, id: string, props: {broadCastFunction: lambda.IFunction}) {
@@ -128,6 +128,13 @@ export class Gateway extends Construct {
         });
 
         const apiResource   = this.api.root.addResource('api');
+
+        const usersResource = apiResource.addResource('users');
+        const signupResource = usersResource.addResource('signup');
+        signupResource.addMethod('POST', broadCastIntegration, {
+            authorizationType: apigateway.AuthorizationType.NONE,
+        });
+
         const proxyResource = apiResource.addResource('{proxy+}');
 
         proxyResource.addMethod('ANY', broadCastIntegration, {

@@ -1,7 +1,9 @@
 package com.artcorner.erp.services.users;
 
+import com.artcorner.erp.components.cognito.CognitoManager;
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
 import com.artcorner.erp.dto.response.users.UserResponse;
+import com.artcorner.erp.dto.response.users.UserSignupResponse;
 import com.artcorner.erp.entities.users.User;
 import com.artcorner.erp.entities.users.UserRole;
 import com.artcorner.erp.exceptions.users.UserNotFoundException;
@@ -23,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
     private final UsersMapper usersMapper;
+    private final CognitoManager cognitoManager;
 
     public User findUserById(UUID id) {
         log.debug("Fetching user by id={}", id);
@@ -41,39 +44,24 @@ public class UserService {
     }
 
     @Transactional
-    public void signUp(RegisterUserRequest request) {
-        UUID currentUserId = securityUtils.getCurrentUserId();
-        UserRole role = getCurrentUserRole();
-        String email = securityUtils.getCurrentUserEmail();
+    public UserSignupResponse signUp(RegisterUserRequest request) {
+        System.out.println("----------------before");
+        log.info("Starting sign-up process for email: {}", request.getEmail());
 
-        log.info("User signup attempt. userId={}", currentUserId);
-
-        if (userRepository.existsById(currentUserId)) {
-            log.error("Signup failed. User already exists. userId={}", currentUserId);
-            throw new IllegalArgumentException("User already registered");
-        }
-
-
-        log.debug("Resolved user role during signup. userId={},email={}, role={}",
-                currentUserId,
-                email,
-                role
+        UUID cognitoUserId = cognitoManager.registerNewUser(
+                request.getEmail(),
+                request.getPassword(),
+                request.getRole()
         );
 
-        User user = usersMapper.mapToUserEntity(
-                request,
-                currentUserId,
-                email,
-                role
-        );
-
+        User user = usersMapper.mapToUserEntity(request, cognitoUserId);
         userRepository.save(user);
 
-        log.debug("User registered successfully. userId={},email={}, role={}",
-                currentUserId,
-                email,
-                role
-        );
+        log.info("Sign-up process completed successfully for user: {}", request.getEmail());
+
+        System.out.println("----------------after");
+
+        return usersMapper.mapToUserSignupResponse(user.getEmail());
     }
 
     public UserResponse login() {

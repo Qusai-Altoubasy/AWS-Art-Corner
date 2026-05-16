@@ -98,7 +98,7 @@ export const ProductCardBase = ({
               border
               border-white/10
               bg-white/5
-              px-2
+              px-3
               py-1
             "
           >
@@ -115,10 +115,11 @@ export const ProductCardBase = ({
                 <Check size={16} />
               </Button>
             )}
-            <button
-              onClick={onDecrement}
-              disabled={disableDecrement}
-              className="
+            {onDecrement && (
+              <button
+                onClick={onDecrement}
+                disabled={disableDecrement}
+                className="
                 flex
                 h-7
                 w-7
@@ -133,9 +134,10 @@ export const ProductCardBase = ({
                 disabled:cursor-not-allowed
                 disabled:opacity-30
               "
-            >
-              <Minus size={14} />
-            </button>
+              >
+                <Minus size={14} />
+              </button>
+            )}
 
             <span className="w-6 text-center text-sm font-bold text-white">
               {quantity}

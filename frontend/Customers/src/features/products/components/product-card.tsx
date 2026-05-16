@@ -13,9 +13,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { loading, addItem: addToCart } = useCartStore();
   const isAdding = loading.addItem[product.id];
 
-  const [quantity, setQuantity] = useState(1);
-  const handleIncrement = () => setQuantity((q) => q + 1);
-  const handleDecrement = () => setQuantity((q) => Math.max(1, q - 1));
+  const [quantity, setQuantity] = useState(50);
+  const handleIncrement = () => setQuantity((q) => q + 50);
+  const handleDecrement = () => setQuantity((q) => Math.max(50, q - 50));
 
   const handleAddToCart = useCallback(async () => {
     try {
@@ -36,7 +36,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       quantity={quantity}
       onIncrement={handleIncrement}
       onDecrement={handleDecrement}
-      disableDecrement={quantity <= 1 || isAdding}
+      disableDecrement={quantity <= 50 || isAdding}
       disableIncrement={isAdding}
       actionLabel="Add"
       actionIcon={<ShoppingCart size={18} />}

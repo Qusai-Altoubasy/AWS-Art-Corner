@@ -8,6 +8,7 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as lambda_event_sources from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { Construct } from 'constructs';
 import { appConfig } from '../config/config';
 
@@ -157,5 +158,24 @@ export class Compute extends Construct {
 
         props.archiveBucket.grantWrite(this.archiveWorker);
         props.backupBucket.grantWrite(this.backupWorker);
+    }
+
+    addIamRoleToBroadCastFunction(userPool: cognito.IUserPool, userPoolClient: cognito.IUserPoolClient) {
+        this.broadCastFunction.addToRolePolicy(new iam.PolicyStatement({
+            actions: [
+                'cognito-idp:AdminCreateUser',
+                'cognito-idp:AdminAddUserToGroup',
+                'cognito-idp:AdminGetUser',
+                'cognito-idp:AdminSetUserPassword',
+                'cognito-idp:AdminDeleteUser'
+            ],
+            resources: [
+                userPool.userPoolArn
+            ],
+            effect: iam.Effect.ALLOW,
+        }));
+
+        this.broadCastFunction.addEnvironment('APP_AWS_COGNITO_USER_POOL_ID', userPool.userPoolId);
+        this.broadCastFunction.addEnvironment('APP_AWS_COGNITO_CLIENT_ID', userPoolClient.userPoolClientId);
     }
 }
