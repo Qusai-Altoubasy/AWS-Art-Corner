@@ -1,6 +1,6 @@
 # Art Corner - Complete Inventory & Order Management Platform
 
-**🚀 Enterprise-Grade SaaS Platform for Remote Order Processing & Inventory Management**
+**🚀 Enterprise-Grade Platform for Remote Order Processing & Inventory Management**
 
 ---
 
