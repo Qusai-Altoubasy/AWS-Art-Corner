@@ -1,10 +1,12 @@
 package com.artcorner.erp.services.inventory;
 
+import com.artcorner.erp.components.S3.S3StorageManager;
 import com.artcorner.erp.components.sqs.InventoryStockAlertEvent;
 import com.artcorner.erp.components.sqs.SqsSender;
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
+import com.artcorner.erp.dto.response.inventory.PresignedUrlResponse;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.exceptions.inventory.InsufficientStockException;
 import com.artcorner.erp.exceptions.inventory.ProductNotFoundException;
@@ -25,6 +27,7 @@ public class InventoryService {
     private final InventoryMapper inventoryMapper;
     private static final int STOCK_ALERT = 1000;
     private final SqsSender sqsSender;
+    private final S3StorageManager s3StorageManager;
 
     public Product findProductById(Long id) {
         log.debug("Fetching product. productId={}", id);
@@ -94,6 +97,18 @@ public class InventoryService {
         log.debug("Products fetched for admin. count={}", products.size());
 
         return products.stream().map(inventoryMapper::mapToAdminResponse).toList();
+    }
+
+    public PresignedUrlResponse getProductImageUploadUrl(String main, String sub) {
+        String contentType = main + "/" + sub;
+
+        log.info("Request received in service to generate presigned URL for contentType: {}", contentType);
+
+        if (!contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Only image files are allowed");
+        }
+
+        return s3StorageManager.generateUploadUrl(contentType);
     }
 
     public AdminProductsResponse addProduct(ProductRequest productRequest) {

@@ -6,12 +6,14 @@ import { LoginPage } from "../../features/auth/components/login-page";
 import { CartPage } from "../../features/cart/components/cart-page";
 import { OrderPage } from "../..//features/orders/components/order-page";
 import { ProductPage } from "../../features/products/components/product-page";
+import { SignupPage } from "../../features/auth/components/signup-page";
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
 
         <Route
           path={ROUTES.DASHBOARD}

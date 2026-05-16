@@ -29,6 +29,7 @@ public class InventoryMapper {
         product.setCost(request.getCost());
         product.setStock(request.getStock());
         product.setStockThreshold(request.getStockThreshold());
+        product.setImageUrl(request.getImageUrl());
 
         product.setActive(true);
 

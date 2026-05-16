@@ -28,4 +28,6 @@ public class ProductRequest {
     @NotNull
     @Min(value = 0)
     private Integer stockThreshold;
+
+    private String imageUrl;
 }

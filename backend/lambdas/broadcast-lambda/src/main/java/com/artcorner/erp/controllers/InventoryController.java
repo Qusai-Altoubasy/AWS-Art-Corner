@@ -3,6 +3,7 @@ package com.artcorner.erp.controllers;
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
 import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
+import com.artcorner.erp.dto.response.inventory.PresignedUrlResponse;
 import com.artcorner.erp.services.inventory.InventoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class InventoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AdminProductsResponse>> getProducts() {
         return ResponseEntity.ok(inventoryService.getAllProductForAdmin());
+    }
+
+    @GetMapping("/products/presigned-url/{contentTypeMain}/{contentTypeSub}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PresignedUrlResponse> getProductImageUploadUrl(
+            @PathVariable("contentTypeMain") String main,
+            @PathVariable("contentTypeSub") String sub) {
+
+        return ResponseEntity.ok(inventoryService.getProductImageUploadUrl(main, sub));
     }
 
     @PostMapping
