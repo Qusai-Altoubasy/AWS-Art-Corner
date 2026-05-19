@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "../../../shared/components/ui/input";
 import { Button } from "../../../shared/components/ui/button";
 import { Mail, Lock } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/useUserStore";
 import { authRepository } from "../repository/AuthRepository";
 import { ROUTES } from "../../../app/router/routes";
@@ -29,7 +29,7 @@ export const LoginPage = () => {
 
       setUser(user);
 
-      navigate(ROUTES.PRODUCTPAGE, {
+      navigate(ROUTES.PRODUCTIVE, {
         replace: true,
       });
       toast.success(`Welcome ${user.name}`);
@@ -81,15 +81,6 @@ export const LoginPage = () => {
               Sign in
             </Button>
           </form>
-          <p className="text-center text-sm text-white/60">
-            Don't have an account?{" "}
-            <Link
-              to={ROUTES.SIGNUP}
-              className="font-bold text-indigo-400 hover:text-indigo-300"
-            >
-              Sign Up
-            </Link>
-          </p>
         </CardContent>
       </Card>
     </main>

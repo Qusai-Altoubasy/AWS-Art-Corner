@@ -42,7 +42,9 @@ export const SignupPage = () => {
       setLoading(true);
       await authRepository.register(formData);
       toast.success("Account created successfully! Please log in.");
-      navigate(ROUTES.LOGIN);
+      navigate(ROUTES.LOGIN, {
+        replace: true,
+      });
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to create account",

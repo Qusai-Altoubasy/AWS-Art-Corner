@@ -11,3 +11,4 @@ const amplifyConfig = {
 };
 
 Amplify.configure(amplifyConfig);
+export default amplifyConfig;

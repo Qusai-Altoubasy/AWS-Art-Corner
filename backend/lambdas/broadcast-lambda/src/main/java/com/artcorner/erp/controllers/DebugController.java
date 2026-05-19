@@ -2,10 +2,7 @@ package com.artcorner.erp.controllers;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -77,5 +74,19 @@ public class DebugController {
     @GetMapping("/products")
     public List<Map<String, Object>> getProducts() {
         return jdbcTemplate.queryForList("SELECT * FROM products");
+    }
+
+    @PostMapping("/clear-database")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String clearDatabase() {
+        String sql = """
+            TRUNCATE TABLE order_items, orders, address, products, users
+            RESTART IDENTITY
+            CASCADE;
+            """;
+
+        jdbcTemplate.execute(sql);
+
+        return "done";
     }
 }

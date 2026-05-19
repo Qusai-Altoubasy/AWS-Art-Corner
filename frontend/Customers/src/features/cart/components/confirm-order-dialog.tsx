@@ -21,8 +21,8 @@ export const ConfirmOrderDialog = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 p-6 text-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-neutral-900/90 p-6 text-white shadow-2xl backdrop-blur-md">
         <div className="flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-xl font-bold">
             <ShoppingBag size={20} />

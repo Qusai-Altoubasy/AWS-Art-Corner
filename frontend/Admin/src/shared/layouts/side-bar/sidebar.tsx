@@ -1,10 +1,9 @@
 import {
   LayoutDashboard,
-  ShoppingCart,
-  ClipboardList,
   LogOut,
   ChevronLeft,
   Menu,
+  ClipboardList,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -87,19 +86,14 @@ export const Sidebar = () => {
 
       <nav className="flex flex-1 flex-col gap-2">
         <SidebarItem
-          to={ROUTES.PRODUCTPAGE}
+          to={ROUTES.PRODUCTIVE}
           icon={<LayoutDashboard size={20} />}
-          label="Dashboard"
+          label="Products"
           isOpen={isSidebarOpen}
         />
+
         <SidebarItem
-          to={ROUTES.CARTPAGE}
-          icon={<ShoppingCart size={20} />}
-          label="Cart"
-          isOpen={isSidebarOpen}
-        />
-        <SidebarItem
-          to={ROUTES.ORDERPAGE}
+          to={ROUTES.ORDERSPAGE}
           icon={<ClipboardList size={20} />}
           label="Orders"
           isOpen={isSidebarOpen}

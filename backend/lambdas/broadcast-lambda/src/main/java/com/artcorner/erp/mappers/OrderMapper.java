@@ -7,6 +7,7 @@ import com.artcorner.erp.dto.response.orders.OrderResponseForCustomer;
 import com.artcorner.erp.dto.response.orders.OrderResponseForEmployee;
 import com.artcorner.erp.entities.inventory.Product;
 import com.artcorner.erp.entities.orders.Order;
+import com.artcorner.erp.entities.orders.OrderStatus;
 import com.artcorner.erp.entities.users.User;
 import org.springframework.stereotype.Component;
 
@@ -113,9 +114,9 @@ public class OrderMapper {
                 .customerName(order.getCustomer().getName())
                 .customerEmail(order.getCustomer().getEmail())
 
-                .employeeId(order.getEmployee() != null ? order.getEmployee().getId() : null)
-                .employeeName(order.getEmployee() != null ? order.getEmployee().getName() : null)
-                .employeeEmail(order.getEmployee() != null ? order.getEmployee().getEmail() : null)
+                .employeeId(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getId() : null)
+                .employeeName(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getName() : null)
+                .employeeEmail(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getEmail() : null)
 
                 .totalAmount(order.getTotalAmount())
                 .totalCost(order.getTotalCost())

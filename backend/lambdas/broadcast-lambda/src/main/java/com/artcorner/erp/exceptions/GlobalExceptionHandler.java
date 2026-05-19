@@ -209,6 +209,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(org.springframework.dao.DataAccessException.class)
     public ResponseEntity<Object> handleDatabaseException(
             org.springframework.dao.DataAccessException ex, HttpServletRequest request) {
+        System.out.println("-----------------------");
+        log.error(ex.getMessage(), ex);
         return buildErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "DATABASE_ERROR",

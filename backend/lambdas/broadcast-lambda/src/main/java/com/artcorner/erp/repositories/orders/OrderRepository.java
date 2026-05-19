@@ -33,7 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.id = :orderId")
     Optional<Order> findByIdWithItems(@Param("orderId") Long orderId);
 
-    @EntityGraph(attributePaths = {"customer", "employee", "items"})
+    @EntityGraph(attributePaths = {"customer", "employee", "items", "items.product"})
     @Query("SELECT o FROM Order o WHERE " +
             "(:status IS NULL OR o.status = :status) AND " +
             "(:customerId IS NULL OR o.customer.id = :customerId)")
