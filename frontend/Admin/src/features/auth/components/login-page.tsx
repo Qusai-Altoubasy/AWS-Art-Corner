@@ -29,7 +29,7 @@ export const LoginPage = () => {
 
       setUser(user);
 
-      navigate(ROUTES.PRODUCTIVE, {
+      navigate(ROUTES.PRODUCTPAGE, {
         replace: true,
       });
       toast.success(`Welcome ${user.name}`);

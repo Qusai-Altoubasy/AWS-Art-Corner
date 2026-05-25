@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import { LoaderCircle } from "lucide-react";
+import * as React from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
@@ -16,7 +17,7 @@ export const Button = ({
   return (
     <button
       {...props}
-      disabled={loading}
+      disabled={loading || props.disabled}
       className={`
         gradient-primary
         shadow-primary

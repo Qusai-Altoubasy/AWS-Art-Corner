@@ -196,10 +196,15 @@ export const GATEWAY = {
   }
 } as const;
 
+export const FRONTENDS = {
+  customersFrontendBucketName: `${PROJECT.prefix}-customer-frontend`,
+  adminFrontendBucketName: `${PROJECT.prefix}-admin-frontend`
+}
+
 export const EDGE = {
   domainName: ENV === 'prod' ? 'artcorner.customer.com' : 'dev.artcorner.customer.com',
-  frontendAssetPath: '../../frontend/Customers/dist',
-  customerFrontendBucketName: `${PROJECT.prefix}-customer-frontend-site`,
+  customersFrontendAssetPath: '../../frontend/Customers/dist',
+  adminsFrontendAssetPath: '../../frontend/Admin/dist',
 
   waf: {
     name: `${PROJECT.prefix}-WebACL`,
@@ -228,6 +233,7 @@ export interface AppConfig {
   messaging: typeof MESSAGING;
   compute: typeof COMPUTE;
   gateway: typeof GATEWAY;
+  frontends: typeof FRONTENDS;
   edge: typeof EDGE;
   tags: typeof TAGS;
   wafEnv: typeof WAF_ENV;
@@ -244,6 +250,7 @@ export const appConfig: AppConfig = {
   messaging: MESSAGING,
   compute: COMPUTE,
   gateway: GATEWAY,
+  frontends: FRONTENDS,
   edge: EDGE,
   tags: TAGS,
   wafEnv: WAF_ENV

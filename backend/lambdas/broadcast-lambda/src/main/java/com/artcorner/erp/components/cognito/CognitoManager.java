@@ -18,67 +18,61 @@ public class CognitoManager {
     private final AppProperties appProperties;
 
     public UUID registerNewUser(String email, String password, UserRole groupName) {
-        String userPoolId = getUserPoolId();
         boolean userCreated = false;
 
         try {
-            AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()
-                    .userPoolId(userPoolId)
-                    .username(email)
-                    .temporaryPassword(password)
-                    .userAttributes(
-                            AttributeType.builder().name("email").value(email).build(),
-                            AttributeType.builder().name("email_verified").value("true").build()
-                    )
-                    .messageAction(MessageActionType.SUPPRESS)
-                    .build();
+            UUID userId = createUserRequest(email, password);
 
-            AdminCreateUserResponse response = cognitoClient.adminCreateUser(createUserRequest);
             log.info("Created user in Cognito User Pool: {}", email);
             userCreated = true;
-            setPasswordRequestPermanent(userPoolId, email, password);
+            setPasswordRequestPermanent(email, password);
 
-            addUserToGroup(userPoolId, email, groupName);
+            addUserToGroup(email, groupName);
 
-            return getUserId(response);
+            return userId;
         } catch (CognitoIdentityProviderException e) {
             log.error("Cognito operation failed for user {}: {}", email, e.awsErrorDetails().errorMessage());
 
             if (userCreated) {
-                rollBackUser(userPoolId, email);
+                rollBackUser(email);
             }
 
             throw new RuntimeException("Failed to register user: " + e.awsErrorDetails().errorMessage());
         }
     }
 
-    private String getUserPoolId() {
-        return appProperties.getAws().getCognitoUserPoolId();
+    public void updateUserActivationStatus(String email, boolean enable) {
+        try {
+            if (enable) {
+                enableUser(email);
+                log.info("Successfully ENABLED user in Cognito: {}", email);
+            } else {
+                disableUser(email);
+                log.info("Successfully DISABLED user in Cognito: {}", email);
+
+                userGlobalSignOut(email);
+                log.info("Global sign-out executed for disabled user: {}", email);
+            }
+        } catch (CognitoIdentityProviderException e) {
+            log.error("Failed to update Cognito activation status for {}: {}", email, e.awsErrorDetails().errorMessage());
+            throw new RuntimeException("Cognito synchronization failed: " + e.awsErrorDetails().errorMessage());
+        }
     }
 
-    private void addUserToGroup(String userPoolId, String email, UserRole groupName) {
-        AdminAddUserToGroupRequest addToGroupRequest = AdminAddUserToGroupRequest.builder()
-                .userPoolId(userPoolId)
+    private UUID createUserRequest(String email, String password) {
+        AdminCreateUserRequest createUserRequest = AdminCreateUserRequest.builder()
+                .userPoolId(getUserPoolId())
                 .username(email)
-                .groupName(groupName.toString())
+                .temporaryPassword(password)
+                .userAttributes(
+                        AttributeType.builder().name("email").value(email).build(),
+                        AttributeType.builder().name("email_verified").value("true").build()
+                )
+                .messageAction(MessageActionType.SUPPRESS)
                 .build();
 
-        log.info("Added user {} to Cognito Group: {}", email, groupName);
-        cognitoClient.adminAddUserToGroup(addToGroupRequest);
-    }
-
-    private void rollBackUser(String userPoolId, String email) {
-        log.warn("Rolling back Cognito user creation for {} due to group assignment failure.", email);
-        try {
-            cognitoClient.adminDeleteUser(AdminDeleteUserRequest.builder()
-                    .userPoolId(userPoolId)
-                    .username(email)
-                    .build());
-            log.warn("Rolled back Cognito user creation for {}", email);
-        } catch (Exception ex) {
-            log.error("Failed to delete orphaned user {} during rollback: {}", email, ex.getMessage());
-            throw new RuntimeException("Failed to register user roll back: " + ex.getMessage());
-        }
+        AdminCreateUserResponse response = cognitoClient.adminCreateUser(createUserRequest);
+        return getUserId(response);
     }
 
     private UUID getUserId(AdminCreateUserResponse response) {
@@ -91,14 +85,67 @@ public class CognitoManager {
         return UUID.fromString(userId);
     }
 
-    private void setPasswordRequestPermanent(String userPoolId, String email, String password) {
+    private void setPasswordRequestPermanent(String email, String password) {
         AdminSetUserPasswordRequest setPasswordRequest = AdminSetUserPasswordRequest.builder()
-                .userPoolId(userPoolId)
+                .userPoolId(getUserPoolId())
                 .username(email)
                 .password(password)
                 .permanent(true)
                 .build();
         cognitoClient.adminSetUserPassword(setPasswordRequest);
         log.info("Password successfully set to PERMANENT for user: {}", email);
+    }
+
+    private void addUserToGroup(String email, UserRole groupName) {
+        AdminAddUserToGroupRequest addToGroupRequest = AdminAddUserToGroupRequest.builder()
+                .userPoolId(getUserPoolId())
+                .username(email)
+                .groupName(groupName.toString())
+                .build();
+
+        log.info("Added user {} to Cognito Group: {}", email, groupName);
+        cognitoClient.adminAddUserToGroup(addToGroupRequest);
+    }
+
+    private void rollBackUser(String email) {
+        log.warn("Rolling back Cognito user creation for {} due to group assignment failure.", email);
+        try {
+            cognitoClient.adminDeleteUser(AdminDeleteUserRequest.builder()
+                    .userPoolId(getUserPoolId())
+                    .username(email)
+                    .build());
+            log.warn("Rolled back Cognito user creation for {}", email);
+        } catch (Exception ex) {
+            log.error("Failed to delete orphaned user {} during rollback: {}", email, ex.getMessage());
+            throw new RuntimeException("Failed to register user roll back: " + ex.getMessage());
+        }
+    }
+
+    private void enableUser(String email){
+        AdminEnableUserRequest enableRequest = AdminEnableUserRequest.builder()
+                .userPoolId(getUserPoolId())
+                .username(email)
+                .build();
+        cognitoClient.adminEnableUser(enableRequest);
+    }
+
+    private void disableUser(String email){
+        AdminDisableUserRequest disableRequest = AdminDisableUserRequest.builder()
+                .userPoolId(getUserPoolId())
+                .username(email)
+                .build();
+        cognitoClient.adminDisableUser(disableRequest);
+    }
+
+    private void userGlobalSignOut(String email){
+        AdminUserGlobalSignOutRequest signOutRequest = AdminUserGlobalSignOutRequest.builder()
+                .userPoolId(getUserPoolId())
+                .username(email)
+                .build();
+        cognitoClient.adminUserGlobalSignOut(signOutRequest);
+    }
+
+    private String getUserPoolId() {
+        return appProperties.getAws().getCognitoUserPoolId();
     }
 }

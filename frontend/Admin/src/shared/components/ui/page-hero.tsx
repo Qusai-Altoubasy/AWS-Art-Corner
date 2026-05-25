@@ -11,7 +11,7 @@ interface PageHeroProps {
   statsTitle?: string;
   statsValue?: string | number;
   statsDescription?: string;
-  stateIcon?: ReactNode;
+  statsIcon?: ReactNode;
 
   buttonAction?: () => void;
   buttonLabel?: string;
@@ -26,7 +26,7 @@ export const PageHero = ({
   description,
   statsTitle,
   statsValue,
-  stateIcon,
+  statsIcon,
   buttonAction,
   buttonLabel,
   buttonIcon,
@@ -67,7 +67,7 @@ export const PageHero = ({
         {(statsTitle || statsValue) && (
           <Card className="w-full max-w-sm">
             <CardContent className="flex flex-col gap-6">
-              {(statsTitle || statsValue || stateIcon) && (
+              {(statsTitle || statsValue || statsIcon) && (
                 <div className="flex items-center justify-between">
                   <div>
                     {statsTitle && (
@@ -81,9 +81,9 @@ export const PageHero = ({
                     )}
                   </div>
 
-                  {stateIcon && (
+                  {statsIcon && (
                     <div className="gradient-primary shadow-primary flex h-16 w-16 items-center justify-center rounded-3xl">
-                      {stateIcon}
+                      {statsIcon}
                     </div>
                   )}
                 </div>

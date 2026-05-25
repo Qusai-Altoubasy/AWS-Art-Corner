@@ -7,6 +7,7 @@ import { Messaging } from '../constructs/messaging';
 import { Compute } from '../constructs/compute';
 import { Gateway } from '../constructs/gateway';
 import { Edge } from '../constructs/edge';
+import { Frontends } from '../constructs/frontends';
 
 interface ArtCornerStackProps extends cdk.StackProps {
   // wafArn: string;
@@ -49,10 +50,14 @@ export class ArtCornerStack extends cdk.Stack {
 
     compute.addIamRoleToBroadCastFunction(gateway.userPool, gateway.userPoolClient);
 
+    const frontends = new Frontends(this, 'FrontendsLayer');
+
     const edge = new Edge(this, 'EdgeLayer', {
       api: gateway.api,
       // wafArn: props.wafArn,
-      productsImagesBucket: storage.productsImagesBucket
+      productsImagesBucket: storage.productsImagesBucket,
+      customersFrontendBucket: frontends.customersFrontendBucket,
+      adminsFrontendBucket: frontends.adminsFrontendBucket
     });
   }
 }

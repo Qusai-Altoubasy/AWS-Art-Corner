@@ -1,4 +1,4 @@
-import { OrderStatus } from "../types/OrderResponseForCustomer";
+import {OrderStatus} from "../types/OrderStatus.ts";
 
 export interface OrderStatusStyle {
   label: string;

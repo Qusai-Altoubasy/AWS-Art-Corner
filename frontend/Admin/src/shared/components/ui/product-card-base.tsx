@@ -50,7 +50,10 @@ export const ProductCardBase = ({
         <img
           src={imageUrl}
           alt={name}
+          loading="lazy"
+          decoding="async"
           onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
           className="
             h-56
             w-full

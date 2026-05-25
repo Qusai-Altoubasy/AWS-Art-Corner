@@ -1,10 +1,10 @@
 import { signIn, signOut } from "aws-amplify/auth";
 import { LoginRequest } from "../types/LoginRequest";
-import { User } from "../types/User";
+import { UserResponse } from "../../../shared/types/UserResponse.ts";
 import { api } from "../../../app/config/api-config";
 
 class AuthRepository {
-  async login(data: LoginRequest): Promise<User> {
+  async login(data: LoginRequest): Promise<UserResponse> {
     const response = await signIn({
       username: data.email,
       password: data.password,
@@ -14,14 +14,14 @@ class AuthRepository {
       throw new Error("Invalid credentials");
     }
     try {
-      return this.getMe();
+      return await this.getMe();
     } catch (error) {
       await signOut();
       throw error;
     }
   }
 
-  async getMe(): Promise<User> {
+  async getMe(): Promise<UserResponse> {
     const response = await api.get("/api/users/login");
     return response.data;
   }

@@ -5,7 +5,7 @@ export async function authSession(): Promise<string | undefined> {
     const session = await fetchAuthSession();
 
     return session.tokens?.idToken?.toString();
-  } catch (error) {
+  } catch {
     return;
   }
 }

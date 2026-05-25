@@ -2,6 +2,8 @@ import { Navigate } from "react-router-dom";
 import { authSession } from "../utils/AuthSession";
 import { ROUTES } from "./routes";
 import { useEffect, useState } from "react";
+import {toast} from "sonner";
+import * as React from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -18,7 +20,9 @@ export default function ProtectedRoute({ children }: Props) {
       setIsAuthenticated(!!token);
       setIsLoading(false);
     }
-    checkAuth();
+    checkAuth().catch((error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to restore session");
+    });
   }, []);
 
   if (isLoading) {

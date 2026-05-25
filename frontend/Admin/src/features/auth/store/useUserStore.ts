@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { User } from "../types/User";
+import type { UserResponse } from "../../../shared/types/UserResponse.ts";
 
 interface UserState {
-  user: User | null;
+  user: UserResponse | null;
 
-  setUser: (user: User) => void;
+  setUser: (user: UserResponse) => void;
   clearUser: () => void;
 }
 

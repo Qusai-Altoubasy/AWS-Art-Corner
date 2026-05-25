@@ -15,6 +15,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useUserStore } from "../../../features/auth/store/useUserStore";
 import { useLayoutStore } from "./useSidebarStore";
+import * as React from "react";
 
 export const Sidebar = () => {
   const { isSidebarOpen, toggleSidebar } = useLayoutStore();
@@ -89,7 +90,7 @@ export const Sidebar = () => {
         <SidebarItem
           to={ROUTES.PRODUCTPAGE}
           icon={<LayoutDashboard size={20} />}
-          label="Dashboard"
+          label="Products"
           isOpen={isSidebarOpen}
         />
         <SidebarItem

@@ -4,17 +4,17 @@ import { api } from "../../../app/config/api-config";
 
 class CartRepository {
   async getCartItems(): Promise<CartItemResponse[]> {
-    const response = await api.get("/api/cart/items");
+    const response = await api.get<CartItemResponse[]>("/api/cart/items");
     return response.data;
   }
 
   async addToCart(item: CartItemRequest): Promise<string> {
-    const response = await api.post("/api/cart/item", item);
+    const response = await api.post<string>("/api/cart/item", item);
     return response.data;
   }
 
   async removeFromCart(productId: number) {
-    await api.delete(`/api/cart/item/${productId.toString()}`);
+    await api.delete<void>(`/api/cart/item/${productId.toString()}`);
   }
 }
 

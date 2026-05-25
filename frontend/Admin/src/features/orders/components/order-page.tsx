@@ -1,4 +1,4 @@
-import { OrderStatus } from "../types/OrderStatus";
+import {OrderStatus} from "../types/OrderStatus";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {PageHero} from "../../../shared/components/ui/page-hero.tsx";
 import {OrderStatusTabs} from "./order-status-tabs.tsx";
@@ -8,31 +8,36 @@ import {useOrderStore} from "../store/useOrderStore.ts";
 import {LoadingState} from "../../../shared/components/ui/loading-state.tsx";
 import {EmptyState} from "../../../shared/components/ui/empty-state.tsx";
 import {OrderCard} from "./order-card.tsx";
+import {toast} from "sonner";
 
 const DEFAULT_STATUS: OrderStatus = "PENDING";
 
-export const OrderPage = () =>{
-    const { orders, loading, fetchOrders } = useOrderStore();
+export const OrderPage = () => {
+    const {orders, loading, fetchOrdersByStatus} = useOrderStore();
 
     const [activeStatus, setActiveStatus] = useState<OrderStatus>(DEFAULT_STATUS);
     const [search, setSearch] = useState("");
 
-    useEffect(()=>{
-        fetchOrders(DEFAULT_STATUS).catch(console.error);
-    }, [fetchOrders]);
+    useEffect(() => {
+        fetchOrdersByStatus(DEFAULT_STATUS).catch((error) => {
+            toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+        });
+    }, [fetchOrdersByStatus]);
 
     const handleStatusChange = useCallback(
         (status: OrderStatus) => {
             setActiveStatus(status);
             setSearch("");
-            fetchOrders(status);
-        },
-        [fetchOrders],
-    );
+            fetchOrdersByStatus(status).catch((error) => {
+                toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+            });
+        }, [fetchOrdersByStatus],);
 
     const handleRefresh = useCallback(() => {
-        fetchOrders(activeStatus);
-    }, [fetchOrders, activeStatus]);
+        fetchOrdersByStatus(activeStatus).catch((error) => {
+            toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+        });
+    }, [fetchOrdersByStatus, activeStatus]);
 
     const filteredOrders = useMemo(() => {
         return orders.filter((order) =>
@@ -66,7 +71,7 @@ export const OrderPage = () =>{
                 refreshIcon={RotateCw}
             />
 
-            {loading && <LoadingState count={6} />}
+            {loading && <LoadingState count={6}/>}
 
             {!loading && filteredOrders.length === 0 && (
                 <EmptyState
@@ -79,7 +84,7 @@ export const OrderPage = () =>{
             {!loading && filteredOrders.length > 0 && (
                 <section className="grid grid-cols-1 gap-6 sm:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                     {filteredOrders.map((order) => (
-                        <OrderCard key={order.orderId} order={order} />
+                        <OrderCard key={order.orderId} order={order}/>
                     ))}
                 </section>
             )}

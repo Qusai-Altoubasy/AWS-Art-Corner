@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import { useProductsStore } from "../store/useProductStore";
 import { PageHero } from "../../../shared/components/ui/page-hero";
 import { LoadingState } from "../../../shared/components/ui/loading-state";
@@ -16,7 +16,9 @@ export const ProductPage = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts().catch((error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to fetch products");
+    });
   }, [fetchProducts]);
 
   const filteredProducts = useMemo(() => {
@@ -25,19 +27,21 @@ export const ProductPage = () => {
     );
   }, [products, search]);
 
-  const handleConfirmAdd = async (data: ProductRequest, file: File | null) => {
+  const handleConfirmAdd = useCallback(async (data: ProductRequest, file: File | null) => {
     try {
       await addProduct(data, file);
       setIsAddDialogOpen(false);
       toast.success("Product created successfully");
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unexpected error occurred while adding the product");
-      }
+      toast.error(error instanceof Error ? error.message : "An unexpected error occurred while adding the product");
     }
-  };
+  },[addProduct]);
+
+  const handleRefresh = useCallback(() => {
+    fetchProducts(true).catch((error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to fetch products");
+    });
+  }, [fetchProducts]);
 
   return (
     <main className="flex flex-col gap-8">
@@ -48,7 +52,7 @@ export const ProductPage = () => {
         description="Monitor stock levels, costs, and more"
         statsTitle="Total Products"
         statsValue={filteredProducts.length}
-        stateIcon={<Package size={30} />}
+        statsIcon={<Package size={30} />}
         buttonAction={() => setIsAddDialogOpen(true)}
         buttonLabel="Add Product"
         buttonIcon={<Plus size={16} />}
@@ -69,7 +73,7 @@ export const ProductPage = () => {
         searchValue={search}
         onSearchChange={setSearch}
         searchPlaceholder="Search products..."
-        onRefresh={() => fetchProducts(true)}
+        onRefresh={handleRefresh}
         refreshLoading={loading}
         searchIcon={Search}
         refreshIcon={RotateCw}

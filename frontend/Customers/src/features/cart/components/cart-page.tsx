@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import { useCartStore } from "../store/useCartStore";
 import { PageHero } from "../../../shared/components/ui/page-hero";
 import { LoadingState } from "../../../shared/components/ui/loading-state";
@@ -17,8 +17,10 @@ export const CartPage = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    fetchCart().catch((error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to fetch cart");
+    });
+    }, [fetchCart]);
 
   const filteredCart = useMemo(() => {
     return cart.filter((item) =>
@@ -27,10 +29,10 @@ export const CartPage = () => {
   }, [cart, search]);
 
   const totalPrice = useMemo(() => {
-    return filteredCart.reduce((total, item) => total + item.price, 0);
-  }, [filteredCart]);
+    return cart.reduce((total, item) => total + item.price, 0);
+  }, [cart]);
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = useCallback(async () => {
     try {
       await placeOrder();
       toast.success("Order placed successfully!");
@@ -41,7 +43,7 @@ export const CartPage = () => {
     } finally {
       setConfirmDialogOpen(false);
     }
-  };
+  }, [placeOrder]);
 
   return (
     <main className="flex flex-col gap-8">
@@ -52,11 +54,12 @@ export const CartPage = () => {
         description="Review your selected products, manage quantities, and prepare for checkout."
         statsTitle="Total Amount"
         statsValue={`$${totalPrice.toFixed(2)}`}
-        stateIcon={<ShoppingCart size={30} />}
+        statsIcon={<ShoppingCart size={30} />}
         buttonAction={() => setConfirmDialogOpen(true)}
         buttonIcon={<ShoppingBag />}
         buttonLoading={isPlacingOrder}
         buttonLabel="Place Order"
+        buttonDisabled={cart.length === 0}
       />
 
       <ConfirmOrderDialog
@@ -65,7 +68,7 @@ export const CartPage = () => {
         onConfirm={handlePlaceOrder}
         loading={isPlacingOrder}
         totalPrice={totalPrice}
-        itemsCount={filteredCart.length}
+        itemsCount={cart.length}
       />
 
       <PageSectionHeader

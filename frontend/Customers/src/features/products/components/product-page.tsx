@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import { useProductsStore } from "../store/useProductStore";
 import { PageHero } from "../../../shared/components/ui/page-hero";
 import { LoadingState } from "../../../shared/components/ui/loading-state";
@@ -6,13 +6,16 @@ import { EmptyState } from "../../../shared/components/ui/empty-state";
 import { Search, Package, RotateCw } from "lucide-react";
 import { PageSectionHeader } from "../../../shared/components/ui/page-section-header";
 import { ProductCard } from "./product-card";
+import {toast} from "sonner";
 
 export const ProductPage = () => {
   const { products, loading, fetchProducts } = useProductsStore();
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts().catch((error) => {
+        toast.error(error instanceof Error ? error.message : "Failed to fetch products");
+    });
   }, [fetchProducts]);
 
   const filteredProducts = useMemo(() => {
@@ -21,7 +24,13 @@ export const ProductPage = () => {
     );
   }, [products, search]);
 
-  return (
+    const handleRefresh = useCallback(() => {
+        fetchProducts(true).catch((error) => {
+            toast.error(error instanceof Error ? error.message : "Failed to fetch products");
+        });
+    }, [fetchProducts]);
+
+    return (
     <main className="flex flex-col gap-8">
       <PageHero
         badge="PREMIUM COLLECTION"
@@ -30,7 +39,7 @@ export const ProductPage = () => {
         description="Browse high quality products."
         statsTitle="Total Products"
         statsValue={filteredProducts.length}
-        stateIcon={<Package size={30} />}
+        statsIcon={<Package size={30} />}
       />
 
       <PageSectionHeader
@@ -39,7 +48,7 @@ export const ProductPage = () => {
         searchValue={search}
         onSearchChange={setSearch}
         searchPlaceholder="Search products..."
-        onRefresh={() => fetchProducts(true)}
+        onRefresh={handleRefresh}
         refreshLoading={loading}
         searchIcon={Search}
         refreshIcon={RotateCw}

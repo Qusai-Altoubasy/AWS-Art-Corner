@@ -1,48 +1,49 @@
 import {
-  LayoutDashboard,
-  LogOut,
-  ChevronLeft,
-  Menu,
-  ClipboardList,
+    LayoutDashboard,
+    LogOut,
+    ChevronLeft,
+    Menu,
+    ClipboardList, BarChart3,
 } from "lucide-react";
 
-import { NavLink, useNavigate } from "react-router-dom";
-import { ROUTES } from "../../../app/router/routes";
-import { Button } from "../../components/ui/button";
-import { authRepository } from "../../../features/auth/repository/AuthRepository";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useUserStore } from "../../../features/auth/store/useUserStore";
-import { useLayoutStore } from "./useSidebarStore";
+import {NavLink, useNavigate} from "react-router-dom";
+import {ROUTES} from "../../../app/router/routes";
+import {Button} from "../../components/ui/button";
+import {authRepository} from "../../../features/auth/repository/AuthRepository";
+import {useState} from "react";
+import {toast} from "sonner";
+import {useUserStore} from "../../../features/auth/store/useUserStore";
+import {useLayoutStore} from "./useSidebarStore";
+import * as React from "react";
 
 export const Sidebar = () => {
-  const { isSidebarOpen, toggleSidebar } = useLayoutStore();
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
-  const userName = user?.name ? user.name.trim() : "Guest";
-  const userLetter = userName.charAt(0).toUpperCase();
+    const {isSidebarOpen, toggleSidebar} = useLayoutStore();
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const user = useUserStore((state) => state.user);
+    const userName = user?.name ? user.name.trim() : "Guest";
+    const userLetter = userName.charAt(0).toUpperCase();
 
-  const handleLogout = async () => {
-    try {
-      setLoading(true);
-      await authRepository.logout();
-      useUserStore.getState().clearUser();
-      navigate(ROUTES.LOGIN, { replace: true });
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleLogout = async () => {
+        try {
+            setLoading(true);
+            await authRepository.logout();
+            useUserStore.getState().clearUser();
+            navigate(ROUTES.LOGIN, {replace: true});
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return (
-    <aside
-      className={`
+    return (
+        <aside
+            className={`
         glass
         hidden
         flex-col
@@ -61,83 +62,98 @@ export const Sidebar = () => {
         rounded-3xl
         ${isSidebarOpen ? "w-64" : "w-24"}
       `}
-    >
-      <div
-        className={`mb-6 flex ${isSidebarOpen ? "justify-start" : "justify-center"}`}
-      >
-        <button
-          onClick={() => toggleSidebar()}
-          className="text-white/60 hover:text-white transition-colors p-2"
         >
-          {isSidebarOpen ? <ChevronLeft /> : <Menu />}
-        </button>
-      </div>
+            <div
+                className={`mb-6 flex ${isSidebarOpen ? "justify-start" : "justify-center"}`}
+            >
+                <button
+                    onClick={() => toggleSidebar()}
+                    className="text-white/60 hover:text-white transition-colors p-2"
+                >
+                    {isSidebarOpen ? <ChevronLeft/> : <Menu/>}
+                </button>
+            </div>
 
-      <div className="mb-10 flex items-center gap-3 overflow-hidden">
-        <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl">
-          {userLetter}
-        </div>
-        {isSidebarOpen && (
-          <div className="fade-in whitespace-nowrap">
-            <h1 className="text-lg font-bold text-white">{userName}</h1>
-          </div>
-        )}
-      </div>
+            <div className="mb-10 flex items-center gap-3 overflow-hidden">
+                <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl">
+                    {userLetter}
+                </div>
+                {isSidebarOpen && (
+                    <div className="fade-in whitespace-nowrap">
+                        <h1 className="text-lg font-bold text-white">{userName}</h1>
+                    </div>
+                )}
+            </div>
 
-      <nav className="flex flex-1 flex-col gap-2">
-        <SidebarItem
-          to={ROUTES.PRODUCTIVE}
-          icon={<LayoutDashboard size={20} />}
-          label="Products"
-          isOpen={isSidebarOpen}
-        />
+            <nav className="flex flex-1 flex-col gap-2">
+                <SidebarItem
+                    to={ROUTES.PRODUCTPAGE}
+                    icon={<LayoutDashboard size={20}/>}
+                    label="Products"
+                    isOpen={isSidebarOpen}
+                />
 
-        <SidebarItem
-          to={ROUTES.ORDERSPAGE}
-          icon={<ClipboardList size={20} />}
-          label="Orders"
-          isOpen={isSidebarOpen}
-        />
-      </nav>
+                <SidebarItem
+                    to={ROUTES.ORDERSPAGE}
+                    icon={<ClipboardList size={20}/>}
+                    label="Orders"
+                    isOpen={isSidebarOpen}
+                />
 
-      <Button
-        onClick={handleLogout}
-        loading={loading}
-        className={`
+                <SidebarItem
+                    to={ROUTES.USERSPAGE}
+                    icon={<ClipboardList size={20}/>}
+                    label="Users"
+                    isOpen={isSidebarOpen}
+                />
+
+                <SidebarItem
+                    to={ROUTES.REPORTSPAGE}
+                    icon={<BarChart3 size={20}/>}
+                    label="Reports"
+                    isOpen={isSidebarOpen}
+                />
+
+            </nav>
+
+            <Button
+                onClick={handleLogout}
+                loading={loading}
+                className={`
           flex 
           items-center 
           transition-all
           duration-300
           ${
-            !isSidebarOpen
-              ? "px-0 justify-center h-12 w-12 self-center rounded-2xl"
-              : "w-full gap-3 px-4"
-          }
+                    !isSidebarOpen
+                        ? "px-0 justify-center h-12 w-12 self-center rounded-2xl"
+                        : "w-full gap-3 px-4"
+                }
         `}
-      >
-        <LogOut className="shrink-0" size={20} />
-        {isSidebarOpen && (
-          <span className="fade-in whitespace-nowrap">Log out</span>
-        )}
-      </Button>
-    </aside>
-  );
+            >
+                <LogOut className="shrink-0" size={20}/>
+                {isSidebarOpen && (
+                    <span className="fade-in whitespace-nowrap">Log out</span>
+                )}
+            </Button>
+        </aside>
+    );
 };
 
 interface SidebarItemProps {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  isOpen: boolean;
+    to: string;
+    icon: React.ReactNode;
+    label: string;
+    isOpen: boolean;
 }
 
 const SidebarItem = (props: SidebarItemProps) => {
-  return (
-    <NavLink
-      to={props.to}
-      title={!props.isOpen ? props.label : ""}
-      className={({ isActive }) =>
-        `
+    return (
+        <NavLink
+            to={props.to}
+            title={!props.isOpen ? props.label : ""}
+            className={({isActive}) =>
+                `
           flex
           items-center
           gap-3
@@ -149,17 +165,17 @@ const SidebarItem = (props: SidebarItemProps) => {
           duration-200
           ${props.isOpen ? "px-4" : "justify-center px-0"} 
           ${
-            isActive
-              ? "gradient-primary text-white"
-              : "text-white/70 hover:bg-white/5 hover:text-white"
-          }
+                    isActive
+                        ? "gradient-primary text-white"
+                        : "text-white/70 hover:bg-white/5 hover:text-white"
+                }
         `
-      }
-    >
-      <div className="shrink-0">{props.icon}</div>
-      {props.isOpen && (
-        <span className="fade-in whitespace-nowrap">{props.label}</span>
-      )}
-    </NavLink>
-  );
+            }
+        >
+            <div className="shrink-0">{props.icon}</div>
+            {props.isOpen && (
+                <span className="fade-in whitespace-nowrap">{props.label}</span>
+            )}
+        </NavLink>
+    );
 };

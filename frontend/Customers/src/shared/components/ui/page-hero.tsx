@@ -11,12 +11,13 @@ interface PageHeroProps {
   statsTitle?: string;
   statsValue?: string | number;
   statsDescription?: string;
-  stateIcon?: ReactNode;
+  statsIcon?: ReactNode;
 
   buttonAction?: () => void;
   buttonLabel?: string;
   buttonIcon?: ReactNode;
   buttonLoading?: boolean;
+  buttonDisabled?: boolean;
 }
 
 export const PageHero = ({
@@ -26,11 +27,12 @@ export const PageHero = ({
   description,
   statsTitle,
   statsValue,
-  stateIcon,
+  statsIcon,
   buttonAction,
   buttonLabel,
   buttonIcon,
   buttonLoading,
+    buttonDisabled,
 }: PageHeroProps) => {
   return (
     <section className="relative overflow-hidden rounded-4xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
@@ -67,7 +69,7 @@ export const PageHero = ({
         {(statsTitle || statsValue) && (
           <Card className="w-full max-w-sm">
             <CardContent className="flex flex-col gap-6">
-              {(statsTitle || statsValue || stateIcon) && (
+              {(statsTitle || statsValue || statsIcon) && (
                 <div className="flex items-center justify-between">
                   <div>
                     {statsTitle && (
@@ -81,9 +83,9 @@ export const PageHero = ({
                     )}
                   </div>
 
-                  {stateIcon && (
+                  {statsIcon && (
                     <div className="gradient-primary shadow-primary flex h-16 w-16 items-center justify-center rounded-3xl">
-                      {stateIcon}
+                      {statsIcon}
                     </div>
                   )}
                 </div>
@@ -93,6 +95,7 @@ export const PageHero = ({
                   onClick={buttonAction}
                   loading={buttonLoading}
                   className="w-full"
+                  disabled={buttonDisabled}
                 >
                   <div className="flex gap-8 items-center justify-between">
                     {buttonLabel}

@@ -4,21 +4,21 @@ import { OrderStatus } from "../types/OrderResponseForCustomer";
 
 class OrderRepository {
   async placeOrder(): Promise<OrderResponseForCustomer> {
-    const response = await api.post("/api/orders");
+    const response = await api.post<OrderResponseForCustomer>("/api/orders");
     return response.data;
   }
 
-  async getOrdersBystatus(
+  async getOrdersByStatus(
     status: OrderStatus,
   ): Promise<OrderResponseForCustomer[]> {
-    const response = await api.get("/api/orders/customer", {
+    const response = await api.get<OrderResponseForCustomer[]>("/api/orders/customer", {
       params: { status },
     });
     return response.data;
   }
 
   async cancelOrder(orderId: number): Promise<string> {
-    const response = await api.patch(`/api/orders/customer/${orderId}/cancel`);
+    const response = await api.patch<string>(`/api/orders/customer/${orderId}/cancel`);
     return response.data;
   }
 }

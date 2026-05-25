@@ -7,7 +7,7 @@ class OrderRepository {
     status?: OrderStatus,
     customerId?: string,
   ): Promise<OrderResponseForAdmin[]> {
-    const response = await api.get("/api/orders/admin", {
+    const response = await api.get<OrderResponseForAdmin[]>("/api/orders/admin", {
       params: {
         status,
         customerId,
@@ -17,7 +17,7 @@ class OrderRepository {
   }
 
   async DeleteOrder(orderId: number) {
-    await api.delete(`/api/orders/${orderId}/delete`);
+    await api.delete<void>(`/api/orders/${orderId}/delete`);
   }
 }
 

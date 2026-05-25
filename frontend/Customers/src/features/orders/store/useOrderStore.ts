@@ -29,13 +29,13 @@ export const useOrderStore = create<OrderState>()((set) => ({
     cancelOrder: {},
   },
 
-  fetchOrdersByStatus: async (status: OrderStatus) => {
+  fetchOrdersByStatus: async (status) => {
     set((state) => ({
       loading: { ...state.loading, fetch: true },
     }));
 
     try {
-      const data = await orderRepository.getOrdersBystatus(status);
+      const data = await orderRepository.getOrdersByStatus(status);
       set({ orders: data });
     } finally {
       set((state) => ({

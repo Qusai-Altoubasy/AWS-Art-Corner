@@ -1,23 +1,24 @@
-import { ButtonHTMLAttributes } from "react";
-import { LoaderCircle } from "lucide-react";
+import {ButtonHTMLAttributes} from "react";
+import {LoaderCircle} from "lucide-react";
+import * as React from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  loading?: boolean;
+    loading?: boolean;
 
-  children: React.ReactNode;
+    children: React.ReactNode;
 };
 
 export const Button = ({
-  loading,
-  children,
-  className = "",
-  ...props
-}: ButtonProps) => {
-  return (
-    <button
-      {...props}
-      disabled={loading}
-      className={`
+                           loading,
+                           children,
+                           className = "",
+                           ...props
+                       }: ButtonProps) => {
+    return (
+        <button
+            {...props}
+            disabled={loading}
+            className={`
         gradient-primary
         shadow-primary
         flex
@@ -38,15 +39,15 @@ export const Button = ({
         disabled:opacity-60
         ${className}
       `}
-    >
-      {loading ? (
-        <>
-          <LoaderCircle className="h-5 w-5 animate-spin" />
-          Loading...
-        </>
-      ) : (
-        children
-      )}
-    </button>
-  );
+        >
+            {loading ? (
+                <>
+                    <LoaderCircle className="h-5 w-5 animate-spin"/>
+                    Loading...
+                </>
+            ) : (
+                children
+            )}
+        </button>
+    );
 };

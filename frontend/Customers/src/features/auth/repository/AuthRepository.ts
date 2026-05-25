@@ -15,7 +15,7 @@ class AuthRepository {
       throw new Error("Invalid credentials");
     }
     try {
-      return this.getMe();
+      return await this.getMe();
     } catch (error) {
       await signOut();
       throw error;
@@ -23,7 +23,7 @@ class AuthRepository {
   }
 
   async getMe(): Promise<User> {
-    const response = await api.get("/api/users/login");
+    const response = await api.get<User>("/api/users/login");
     return response.data;
   }
 
@@ -34,7 +34,7 @@ class AuthRepository {
   async register(
     data: RegisterRequest,
   ): Promise<{ message: string; email: string }> {
-    const response = await api.post("/api/users/signup", data);
+    const response = await api.post<{ message: string; email: string }>("/api/users/signup", data);
     return response.data;
   }
 }

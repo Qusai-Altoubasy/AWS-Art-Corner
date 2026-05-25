@@ -1,6 +1,8 @@
 export const ROUTES = {
   LOGIN: "/login",
   DASHBOARD: "/",
-  PRODUCTIVE: "/productpage",
+  PRODUCTPAGE: "/productpage",
   ORDERSPAGE: "/orderspage",
+  USERSPAGE: "/userspage",
+  REPORTSPAGE: "/reportspage",
 };

@@ -8,6 +8,7 @@ import { PageSectionHeader } from "../../../shared/components/ui/page-section-he
 import { OrderCard } from "./order-card";
 import { OrderStatusTabs } from "./order-status-tabs";
 import { ClipboardList, Search, RotateCw } from "lucide-react";
+import {toast} from "sonner";
 
 const DEFAULT_STATUS: OrderStatus = "PENDING";
 
@@ -20,20 +21,25 @@ export const OrderPage = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchOrdersByStatus(DEFAULT_STATUS);
-  }, []);
+    fetchOrdersByStatus(DEFAULT_STATUS).catch((error) => {
+        toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+    });
+  }, [fetchOrdersByStatus]);
 
   const handleStatusChange = useCallback(
     (status: OrderStatus) => {
       setActiveStatus(status);
       setSearch("");
-      fetchOrdersByStatus(status);
+      fetchOrdersByStatus(status).catch((error) => {
+          toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+      });
     },
-    [fetchOrdersByStatus],
-  );
+    [fetchOrdersByStatus],);
 
   const handleRefresh = useCallback(() => {
-    fetchOrdersByStatus(activeStatus);
+    fetchOrdersByStatus(activeStatus).catch((error) => {
+        toast.error(error instanceof Error ? error.message : "Failed to fetch orders");
+    });
   }, [fetchOrdersByStatus, activeStatus]);
 
   const filteredOrders = useMemo(() => {

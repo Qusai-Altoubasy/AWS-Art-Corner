@@ -3,7 +3,7 @@ import { api } from "../../../app/config/api-config";
 
 class ProductsRepository {
   async getAllProducts(): Promise<CustomerProductResponse[]> {
-    const response = await api.get("/api/inventory/products");
+    const response = await api.get<CustomerProductResponse[]>("/api/inventory/products");
     return response.data;
   }
 }

@@ -7,7 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { Input } from "../../../shared/components/ui/input";
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { Button } from "../../../shared/components/ui/button";
 import { ProductRequest } from "../types/ProductRequest";
 
@@ -36,7 +36,6 @@ export const EditDialog = ({
   onDelete,
   loading,
 }: EditDialogProps) => {
-  if (!open) return null;
 
   const [editedName, setEditedName] = useState(name);
   const [editedPrice, setEditedPrice] = useState(price);
@@ -55,7 +54,7 @@ export const EditDialog = ({
     }
   }, [open, name, price, cost, stock, stockThreshold]);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const newData: ProductRequest = {
       name: editedName,
       price: Number(editedPrice),
@@ -66,7 +65,9 @@ export const EditDialog = ({
     };
 
     onConfirm(newData);
-  };
+  },[editedCost, editedName, editedPrice, editedStock, editedStockThreshold, onConfirm]);
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">

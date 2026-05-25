@@ -99,6 +99,9 @@ public class UserService {
         log.warn("User activation change requested. targetUserId={}, newStatus={}", id, active);
 
         User user = findUserById(id);
+
+        cognitoManager.updateUserActivationStatus(user.getEmail(), active);
+
         user.setActive(active);
         userRepository.save(user);
 

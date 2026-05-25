@@ -1,7 +1,7 @@
 import { ProductCardBase } from "../../../shared/components/ui/product-card-base";
 import { useProductsStore } from "../store/useProductStore";
 import { AdminProductResponse } from "../types/AdminProductResponse";
-import { useState } from "react";
+import {useCallback, useState} from "react";
 import { EditDialog } from "./edit-dialog";
 import { ProductRequest } from "../types/ProductRequest";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     setIsDialogOpen(true);
   };
 
-  const handleConfirmUpdate = async (updatedData: ProductRequest) => {
+  const handleConfirmUpdate = useCallback(async (updatedData: ProductRequest) => {
     try {
       await updateProduct(product.id, updatedData);
 
@@ -32,9 +32,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         toast.error("An unexpected error occurred");
       }
     }
-  };
+  },[product.id, updateProduct]);
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     try {
       await deleteProduct(product.id);
       toast.success("Product has been deleted.");
@@ -45,7 +45,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         toast.error("An unexpected error occurred");
       }
     }
-  };
+  },[product.id, deleteProduct]);
 
   return (
     <>

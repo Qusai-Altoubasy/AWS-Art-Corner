@@ -5,7 +5,7 @@ interface ConfirmOrderDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  loading?: boolean;
+  loading: boolean;
   totalPrice: number;
   itemsCount: number;
 }

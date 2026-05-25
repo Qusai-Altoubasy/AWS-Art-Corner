@@ -42,7 +42,6 @@ export const PageSectionHeader = ({
         )}
       </div>
 
-      {/* Right Side */}
       <div className="flex w-full items-center gap-2 md:max-w-md">
         {onSearchChange && (
           <div className="flex-1">

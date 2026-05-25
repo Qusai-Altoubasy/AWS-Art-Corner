@@ -167,7 +167,10 @@ export class Compute extends Construct {
                 'cognito-idp:AdminAddUserToGroup',
                 'cognito-idp:AdminGetUser',
                 'cognito-idp:AdminSetUserPassword',
-                'cognito-idp:AdminDeleteUser'
+                'cognito-idp:AdminDeleteUser',
+                'cognito-idp:AdminDisableUser',
+                'cognito-idp:AdminEnableUser',
+                'cognito-idp:AdminUserGlobalSignOut'
             ],
             resources: [
                 userPool.userPoolArn

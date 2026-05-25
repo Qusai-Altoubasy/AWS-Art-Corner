@@ -39,7 +39,7 @@ export const CartCard = ({ item }: CartCardProps) => {
         error instanceof Error ? error.message : "Failed to update item",
       );
     }
-  }, [addItem, item.productId, quantity]);
+  }, [addItem, item.productId, item.quantity, quantity]);
 
   const hasChanges = quantity !== item.quantity;
   return (

@@ -106,6 +106,8 @@ public class OrderMapper {
     }
 
     public OrderResponseForAdmin mapToOrderResponseForAdmin(Order order) {
+        boolean hasEmployee = order.getStatus() != OrderStatus.PENDING && order.getStatus() != OrderStatus.CANCELED;
+
         return OrderResponseForAdmin.builder()
                 .orderId(order.getId())
                 .status(order.getStatus())
@@ -114,9 +116,9 @@ public class OrderMapper {
                 .customerName(order.getCustomer().getName())
                 .customerEmail(order.getCustomer().getEmail())
 
-                .employeeId(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getId() : null)
-                .employeeName(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getName() : null)
-                .employeeEmail(order.getStatus() != OrderStatus.PENDING ? order.getEmployee().getEmail() : null)
+                .employeeId(hasEmployee ? order.getEmployee().getId() : null)
+                .employeeName(hasEmployee ? order.getEmployee().getName() : null)
+                .employeeEmail(hasEmployee ? order.getEmployee().getEmail() : null)
 
                 .totalAmount(order.getTotalAmount())
                 .totalCost(order.getTotalCost())

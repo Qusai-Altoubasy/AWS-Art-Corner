@@ -11,10 +11,11 @@ export interface edgeProps{
     api: apigateway.RestApi,
     // wafArn: string,
     productsImagesBucket: s3.IBucket;
+    customersFrontendBucket: s3.IBucket;
+    adminsFrontendBucket: s3.IBucket;
 }
 export class Edge extends Construct {
     public readonly distribution: cloudfront.Distribution;
-    public readonly customersFrontendBucket: s3.Bucket;
 
     constructor(scope: Construct, id: string, props:edgeProps) {
         super(scope, id);
@@ -23,17 +24,12 @@ export class Edge extends Construct {
 
         const s3Origin = origins.S3BucketOrigin.withOriginAccessControl(props.productsImagesBucket);
 
-        this.customersFrontendBucket = new s3.Bucket(this, 'FrontendBucket', {
-            bucketName: appConfig.edge.customerFrontendBucketName,
-            encryption: s3.BucketEncryption.S3_MANAGED,
-            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-            versioned: appConfig.storage.versioning,
-            removalPolicy: appConfig.env === 'prod' ? cdk.RemovalPolicy.RETAIN : cdk.RemovalPolicy.DESTROY,
-            autoDeleteObjects: appConfig.env !== 'prod',
-        });
-
         const customersFrontendOrigin =origins.S3BucketOrigin.withOriginAccessControl(
-            this.customersFrontendBucket
+            props.customersFrontendBucket
+        );
+
+        const adminsFrontendOrigin =origins.S3BucketOrigin.withOriginAccessControl(
+            props.adminsFrontendBucket
         );
 
         this.distribution = new cloudfront.Distribution(this, 'Distribution', {
@@ -66,7 +62,7 @@ export class Edge extends Construct {
         });
 
         this.distribution.addBehavior(
-            'api/*', 
+            'api/*',
             apiOrigin,
             {
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.HTTPS_ONLY,
@@ -77,7 +73,7 @@ export class Edge extends Construct {
         );
 
         this.distribution.addBehavior(
-            'images/*', 
+            'images/*',
             s3Origin,
             {
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -86,16 +82,37 @@ export class Edge extends Construct {
             }
         );
 
+        this.distribution.addBehavior(
+            'admin/*',
+            adminsFrontendOrigin,
+            {
+                viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+                compress: true,
+            }
+        );
+
         new s3deploy.BucketDeployment(this, 'DeployFrontend', {
             sources: [
                 s3deploy.Source.asset(
-                    appConfig.edge.frontendAssetPath
+                    appConfig.edge.customersFrontendAssetPath
                 ),
             ],
-            destinationBucket: this.customersFrontendBucket,
+            destinationBucket: props.customersFrontendBucket,
             distribution: this.distribution,
             distributionPaths: ['/*'],
         });
 
+        new s3deploy.BucketDeployment(this, 'DeployAdminsFrontend', {
+            sources: [
+                s3deploy.Source.asset(
+                    appConfig.edge.adminsFrontendAssetPath
+                ),
+            ],
+            destinationBucket: props.adminsFrontendBucket,
+            distribution: this.distribution,
+            distributionPaths: ['/admin/*'], 
+        });
     }
 }

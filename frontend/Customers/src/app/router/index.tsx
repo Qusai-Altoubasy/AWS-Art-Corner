@@ -16,14 +16,7 @@ export default function Router() {
         <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
 
         <Route
-          path={ROUTES.DASHBOARD}
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
+            path={ROUTES.DASHBOARD}
           element={
             <ProtectedRoute>
               <Dashboard />
