@@ -2,7 +2,7 @@ package com.artcorner.erp.dto.response.inventory;
 
 import java.math.BigDecimal;
 
-public interface CustomerProductResponse {
+public interface ProductResponse {
     Long getId();
     String getName();
     BigDecimal getPrice();

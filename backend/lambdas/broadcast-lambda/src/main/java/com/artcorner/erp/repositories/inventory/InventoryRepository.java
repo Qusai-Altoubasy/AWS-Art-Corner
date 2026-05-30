@@ -1,6 +1,6 @@
 package com.artcorner.erp.repositories.inventory;
 
-import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
+import com.artcorner.erp.dto.response.inventory.ProductResponse;
 import com.artcorner.erp.entities.inventory.Product;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +18,7 @@ public interface InventoryRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p.id as id, p.name as name, p.price as price, p.imageUrl as imageUrl" +
             " FROM Product p WHERE p.stock > p.stockThreshold")
-    List<CustomerProductResponse> findAllProductsForCustomer();
+    List<ProductResponse> findAllProductsForCustomer();
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Product> findWithLockById(Long id);
@@ -26,4 +26,15 @@ public interface InventoryRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Query("UPDATE Product p SET p.stock = p.stock + :quantity WHERE p.id = :productId")
     void incrementStock(@Param("productId") Long productId, @Param("quantity") int quantity);
+
+    @Query("""
+               SELECT p.id as id,
+                      p.name as name,
+                      p.price as price,
+                      p.imageUrl as imageUrl
+               FROM Product p
+               WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%'))
+               AND p.stock > p.stockThreshold
+            """)
+    List<ProductResponse> searchProductsForEmployee(String query);
 }

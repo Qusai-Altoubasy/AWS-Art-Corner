@@ -2,6 +2,7 @@ package com.artcorner.erp.services.users;
 
 import com.artcorner.erp.components.cognito.CognitoManager;
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
+import com.artcorner.erp.dto.response.users.CustomerResponseForEmployee;
 import com.artcorner.erp.dto.response.users.UserResponse;
 import com.artcorner.erp.dto.response.users.UserSignupResponse;
 import com.artcorner.erp.entities.users.User;
@@ -106,5 +107,12 @@ public class UserService {
         userRepository.save(user);
 
         log.info("User activation updated. userId={}, active={}", id, active);
+    }
+
+    public List<CustomerResponseForEmployee> searchCustomers(String query) {
+        List<User> customers = userRepository.searchCustomersForEmployee(
+                UserRole.CUSTOMER, query);
+
+        return customers.stream().map(usersMapper::mapToCustomerResponseForEmployee).toList();
     }
 }

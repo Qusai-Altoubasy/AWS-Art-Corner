@@ -1,11 +1,11 @@
 package com.artcorner.erp.mappers;
 
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
+import com.artcorner.erp.dto.response.users.CustomerResponseForEmployee;
 import com.artcorner.erp.dto.response.users.UserResponse;
 import com.artcorner.erp.dto.response.users.UserSignupResponse;
 import com.artcorner.erp.entities.users.Address;
 import com.artcorner.erp.entities.users.User;
-import com.artcorner.erp.entities.users.UserRole;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -74,5 +74,18 @@ public class UsersMapper {
         }
 
         return response;
+    }
+
+    public CustomerResponseForEmployee mapToCustomerResponseForEmployee(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        return CustomerResponseForEmployee.builder()
+                .customerId(user.getId())
+                .customerName(user.getName())
+                .customerPhone(user.getPhone())
+                .customerEmail(user.getEmail())
+                .build();
     }
 }

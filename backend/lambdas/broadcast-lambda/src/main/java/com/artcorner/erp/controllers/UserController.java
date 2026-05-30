@@ -1,6 +1,7 @@
 package com.artcorner.erp.controllers;
 
 import com.artcorner.erp.dto.request.users.RegisterUserRequest;
+import com.artcorner.erp.dto.response.users.CustomerResponseForEmployee;
 import com.artcorner.erp.dto.response.users.UserResponse;
 import com.artcorner.erp.dto.response.users.UserSignupResponse;
 import com.artcorner.erp.entities.users.UserRole;
@@ -45,4 +46,10 @@ public class UserController {
         return ResponseEntity.ok("Updated activation successfully");
     }
 
+    @GetMapping("/search/CUSTOMER")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<List<CustomerResponseForEmployee>> getCustomers(
+            @RequestParam String query) {
+        return ResponseEntity.ok(userService.searchCustomers(query));
+    }
 }

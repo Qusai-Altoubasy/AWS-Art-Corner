@@ -4,7 +4,7 @@ import com.artcorner.erp.components.S3.S3StorageManager;
 import com.artcorner.erp.components.sqs.InventoryStockAlertEvent;
 import com.artcorner.erp.components.sqs.SqsSender;
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
-import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
+import com.artcorner.erp.dto.response.inventory.ProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.dto.response.inventory.PresignedUrlResponse;
 import com.artcorner.erp.entities.inventory.Product;
@@ -171,10 +171,10 @@ public class InventoryService {
         return inventoryMapper.mapToAdminResponse(product);
     }
 
-    public List<CustomerProductResponse> getAllProductForCustomer(){
+    public List<ProductResponse> getAllProductForCustomer(){
         log.info("Fetching all products for customer");
 
-        List<CustomerProductResponse> products =
+        List<ProductResponse> products =
                 inventoryRepository.findAllProductsForCustomer();
 
         log.debug("Products fetched for customer. count={}", products.size());
@@ -182,4 +182,7 @@ public class InventoryService {
         return products;
     }
 
+    public List<ProductResponse> search(String query){
+        return inventoryRepository.searchProductsForEmployee(query);
+    }
 }

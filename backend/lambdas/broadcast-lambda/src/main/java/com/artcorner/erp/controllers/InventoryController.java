@@ -1,7 +1,7 @@
 package com.artcorner.erp.controllers;
 
 import com.artcorner.erp.dto.response.inventory.AdminProductsResponse;
-import com.artcorner.erp.dto.response.inventory.CustomerProductResponse;
+import com.artcorner.erp.dto.response.inventory.ProductResponse;
 import com.artcorner.erp.dto.request.inventory.ProductRequest;
 import com.artcorner.erp.dto.response.inventory.PresignedUrlResponse;
 import com.artcorner.erp.services.inventory.InventoryService;
@@ -58,8 +58,15 @@ public class InventoryController {
 
     @GetMapping("/products")
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<List<CustomerProductResponse>>  getAllProductsForCustomer() {
+    public ResponseEntity<List<ProductResponse>>  getAllProductsForCustomer() {
         return ResponseEntity.ok(inventoryService.getAllProductForCustomer());
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<List<ProductResponse>> searchProducts(
+            @RequestParam String query) {
+        return ResponseEntity.ok(inventoryService.search(query));
     }
 
 }
